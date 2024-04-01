@@ -65,7 +65,7 @@ function Form() {
                 noValidate
                 autoComplete='off'
                 >
-                <ImgLogo src='../../../public/images/img-telainicial.png'/>
+                <ImgLogo src='images/img-telainicial.png'/>
                 <FormControl sx={{ m: 1, width: '35ch',  '& label.Mui-focused': {
                                 color:'#6F7E8C',
                               }, }} variant='standart'>

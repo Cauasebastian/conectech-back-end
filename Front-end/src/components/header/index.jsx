@@ -11,7 +11,7 @@ const Header = ({itens, displayBotao, position})=> {
     return(
         
              <HeaderDiv position={position}>
-                <ImagemLogo onClick={goToInitialPage} src='../../../public/images/img-logo.png'/>
+                <ImagemLogo onClick={goToInitialPage} src='images/img-logo.png'/>
 
                 <ListaItensHeader>
                     {itens.length> 0 && itens.map((item)=> <ItemHeader onClick={item.caminho} key={item.id}>{item.nome}</ItemHeader>)}
@@ -19,7 +19,7 @@ const Header = ({itens, displayBotao, position})=> {
                 </ListaItensHeader>
 
                 <BotaoHamburguer >
-                    <img src='../../../public/images/img-menu.svg'/>
+                    <img src='images/img-menu.svg'/>
                 </BotaoHamburguer>
             </HeaderDiv>
         
