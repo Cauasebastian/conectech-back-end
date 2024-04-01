@@ -1,0 +1,105 @@
+.container{
+    padding: 1.25rem;
+    width: 100vw;
+    margin-top: 5rem;
+   
+    
+    
+    
+    
+    
+}
+
+.content{
+    display: flex;
+    text-align: center;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    justify-content: center;
+    gap: 1rem; 
+   
+   
+   
+    
+}
+
+span{
+    
+    font-size: 1.5rem;
+}
+
+.content > span:nth-child(1){
+    -webkit-transform: translateX(-1px) translateY(30px) rotate(-23deg) ;
+    transform: translateX(-1px) translateY(50px) rotate(-30deg);
+}
+.content > span:nth-child(2){
+    -webkit-transform: translateX(-1px) translateY(11px) rotate(-12deg) ;
+    transform: translateX(-8px) translateY(13px) rotate(-18deg);
+}
+.content > span:nth-child(3){
+    -webkit-transform: translateX(-1px) translateY(8px) rotate(-2deg) ;
+    transform: translateX(-12px) translateY(-9px) rotate(-3deg);
+}
+.content > span:nth-child(4){
+    -webkit-transform: translateX(-1px) translateY(8px) rotate(-2deg) ;
+    transform: translateX(-13px) translateY(-9px) rotate(2deg);
+}
+.content > span:nth-child(5){
+    -webkit-transform: translateX(-1px) translateY(8px) rotate(2deg) ;
+    transform: translateX(-16px) translateY(-2px) rotate(11deg);
+}
+.content > span:nth-child(6){
+    -webkit-transform: translateX(-1px) translateY(15px) rotate(7deg) ;
+    transform: translateX(-21px) translateY(25px) rotate(18deg);
+}
+
+.itens-list{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7rem;
+    gap: 2rem;
+    width: 100vw;
+ 
+    
+}
+
+
+.card-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    border: 1px solid #fff;
+    padding: 0.5rem;
+    border-radius: 7px;
+    background: #7c7c7c59;
+    box-shadow: 0 8px 32px 0 #1f26875e;
+    backdrop-filter: blur( 13.5px );
+    -webkit-backdrop-filter: blur( 13.5px );
+    color: #f3f3f3;
+    font-family: 'Poppins', sans-serif;
+    padding-bottom: 2rem;
+    z-index: 200;
+    
+    
+    
+    
+}
+
+.card-list img{
+    width: 13.7rem;
+   
+}
+
+.card-list h3{
+    font-weight: 400;
+    margin-top: 1rem;
+}
+
+.card-list p{
+    font-weight: 300;
+    margin-top: -01rem;
+    
+}

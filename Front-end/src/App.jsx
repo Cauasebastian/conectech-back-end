@@ -1,4 +1,3 @@
-import  GlobalStyle  from './globals/globalstyle'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import TelaInicial from './pages/TelaInicial/telainicial'
 import Home from './pages/Home/home'
@@ -8,16 +7,15 @@ function App() {
   
 
   return (
-    <>
-        <GlobalStyle/>
+    
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<TelaInicial/>}/>
+            <Route path='' element={<TelaInicial/>}/>
             <Route path='/home' element={<Home/>}/>
             <Route path='/login' element={<TelaLogin/>}/>
           </Routes>
         </BrowserRouter>
-    </>
+    
    
   )
 }

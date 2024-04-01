@@ -1,9 +1,11 @@
 import styled from "styled-components";
 
 export const TelaInicialDiv = styled.div`
-    background-color: #001439;
+    background-image: linear-gradient(#003363  ,#010727);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     
-    margin-top: 0 !important; 
     
     
 `
