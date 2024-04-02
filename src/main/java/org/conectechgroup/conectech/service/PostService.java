@@ -26,5 +26,8 @@ public class PostService {
         maxDate = new Date(maxDate.getTime() + 24 * 60 * 60 * 1000);
         return repo.fullSearch(text, minDate, maxDate);
     }
+    public Post insert(Post obj) {
+        return repo.insert(obj);
+    }
 
 }

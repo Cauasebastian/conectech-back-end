@@ -86,4 +86,8 @@ public class User implements java.io.Serializable{
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
+
+    public User orElseThrow(Object userNotFound) {
+        return null;
+    }
 }

@@ -1,8 +1,10 @@
 package org.conectechgroup.conectech.service;
 
+import com.mongodb.DuplicateKeyException;
 import org.conectechgroup.conectech.model.User;
 import org.conectechgroup.conectech.repository.UserRepository;
 import org.conectechgroup.conectech.service.exception.ObjectNotFoundException;
+import org.conectechgroup.conectech.service.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,11 @@ public class UserService {
     }
 
     public User insert(User obj) {
-        return repo.insert(obj);
+        try {
+            return repo.insert(obj);
+        } catch (DuplicateKeyException e) {
+            throw new UserAlreadyExistsException("User already exists with id: " + obj.getId());
+        }
     }
 
     public void delete(Integer id) {

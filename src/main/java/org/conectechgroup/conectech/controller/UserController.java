@@ -2,6 +2,7 @@ package org.conectechgroup.conectech.controller;
 
 import org.conectechgroup.conectech.model.Post;
 import org.conectechgroup.conectech.model.User;
+import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,18 @@ public class UserController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private PostService postService;
+
+    @PostMapping("/{id}/posts")
+    public ResponseEntity<Void> addPostToUser(@PathVariable Integer id, @RequestBody Post post) {
+        User user = service.findById(id);
+        post = postService.insert(post); // Save the post in the PostRepository
+        user.getPosts().add(post);
+        service.update(user);
+        return ResponseEntity.noContent().build();
+    }
 
     @RequestMapping(method= RequestMethod.GET)
     public ResponseEntity<List<User>> findAll() {
