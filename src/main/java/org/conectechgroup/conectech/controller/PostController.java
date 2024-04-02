@@ -5,10 +5,7 @@ import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.util.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -25,12 +22,12 @@ public class PostController {
         return ResponseEntity.ok().body(list);
     }
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Post> findById(Integer id) {
+    public ResponseEntity<Post> findById(@PathVariable Integer id) {
         Post obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
     @GetMapping(value = "/title")
-    public ResponseEntity<List<Post>> findByTitle(String title) {
+    public ResponseEntity<List<Post>> findByTitle(@RequestParam String title) {
         List<Post> list = service.findByTitle(title);
         return ResponseEntity.ok().body(list);
     }
