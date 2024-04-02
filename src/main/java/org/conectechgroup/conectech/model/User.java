@@ -8,7 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 @Document(collection = "users")
-public class User {
+public class User implements java.io.Serializable{
+    private static final long serialVersionUID = 1L;
     @Id
     private Integer id;
     private String name;
