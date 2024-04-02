@@ -23,7 +23,7 @@ public class UserController {
     private PostService postService;
 
     @PostMapping("/{id}/posts")
-    public ResponseEntity<Void> addPostToUser(@PathVariable Integer id, @RequestBody Post post) {
+    public ResponseEntity<Void> addPostToUser(@PathVariable String id, @RequestBody Post post) {
         User user = service.findById(id);
         post = postService.insert(post); // Save the post in the PostRepository
         user.getPosts().add(post);
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @RequestMapping(value= "/{id}", method=RequestMethod.GET)
-    public ResponseEntity<User> findById(@PathVariable Integer id) {
+    public ResponseEntity<User> findById(@PathVariable String id) {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
@@ -51,20 +51,20 @@ public class UserController {
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> update(@RequestBody User obj, @PathVariable Integer id) {
+    public ResponseEntity<Void> update(@RequestBody User obj, @PathVariable String id) {
         obj.setId(id);
         service.update(obj);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value="/{id}/posts", method=RequestMethod.GET)
-    public ResponseEntity<List<Post>> getPosts(@PathVariable Integer id) {
+    public ResponseEntity<List<Post>> getPosts(@PathVariable String id) {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(obj.getPosts());
     }

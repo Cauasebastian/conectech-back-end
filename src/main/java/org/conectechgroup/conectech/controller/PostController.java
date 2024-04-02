@@ -20,8 +20,14 @@ public class PostController {
     @Autowired
     private UserService userService;
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Post> findById(@PathVariable Integer id) {
+        Post obj = postService.findById(id);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @PostMapping("/{id}/posts")
-    public ResponseEntity<Void> addPostToUser(@PathVariable Integer id, @RequestBody Post post) {
+    public ResponseEntity<Void> addPostToUser(@PathVariable String id, @RequestBody Post post) {
         User user = userService.findById(id);
         user.getPosts().add(post);
         userService.update(user);
@@ -32,11 +38,6 @@ public class PostController {
     public ResponseEntity<List<Post>> findAll() {
         List<Post> list = postService.findALL();
         return ResponseEntity.ok().body(list);
-    }
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Post> findById(@PathVariable Integer id) {
-        Post obj = postService.findById(id);
-        return ResponseEntity.ok().body(obj);
     }
     @GetMapping(value = "/title")
     public ResponseEntity<List<Post>> findByTitle(@RequestParam String title) {

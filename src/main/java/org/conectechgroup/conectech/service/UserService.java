@@ -19,8 +19,8 @@ public class UserService {
         return repo.findAll();
     }
 
-    public User findById(Integer id) {
-        return repo.findById(id.toString())
+    public User findById(String id) {
+        return repo.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 
@@ -32,9 +32,9 @@ public class UserService {
         }
     }
 
-    public void delete(Integer id) {
+    public void delete(String id) {
         findById(id);
-        repo.deleteById(id.toString());
+        repo.deleteById(id);
     }
 
     public User update(User obj) {
