@@ -8,6 +8,9 @@ const Header = ({itens, displayBotao, position})=> {
      const goToInitialPage = () => {
          navigate('/')
      }
+     const goToTelaCadastro = () => {
+        navigate('/cadastro')
+     }
     return(
         
              <HeaderDiv position={position}>
@@ -15,7 +18,7 @@ const Header = ({itens, displayBotao, position})=> {
 
                 <ListaItensHeader>
                     {itens.length> 0 && itens.map((item)=> <ItemHeader onClick={item.caminho} key={item.id}>{item.nome}</ItemHeader>)}
-                    <Botao display={displayBotao}  nome="Vamos começar" link=""/>
+                    <Botao onClick={goToTelaCadastro} display={displayBotao}  nome="Vamos começar" link=""/>
                 </ListaItensHeader>
 
                 <BotaoHamburguer >
