@@ -1,5 +1,6 @@
 package org.conectechgroup.conectech.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,6 +22,7 @@ public class User implements java.io.Serializable{
     private String password;
 
     @DBRef(lazy = true)
+    @JsonManagedReference // Evita recursividade infinita
     private List<Post> posts = new ArrayList<>();
 
     public User() {

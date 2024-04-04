@@ -1,8 +1,10 @@
 package org.conectechgroup.conectech.service;
 
 import com.mongodb.DuplicateKeyException;
+import org.conectechgroup.conectech.model.Post;
+import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.model.User;
-import org.conectechgroup.conectech.model.Post; // Added import statement for Post
+import org.conectechgroup.conectech.repository.PostRepository;
 import org.conectechgroup.conectech.repository.UserRepository;
 import org.conectechgroup.conectech.service.exception.ObjectNotFoundException;
 import org.conectechgroup.conectech.service.exception.UserAlreadyExistsException;
@@ -10,11 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository repo;
+
+    @Autowired
+    private PostRepository postRepository;
+
 
     public List<User> findAll() {
         return repo.findAll();
@@ -54,7 +61,28 @@ public class UserService {
 
     public User addPostToUser(String userId, Post post) {
         User user = findById(userId);
+        post.setAuthor(user); // Set the author of the post
         user.getPosts().add(post); // Ensure getPosts() returns List<Post>
         return repo.save(user);
     }
+    public List<PostDTO> getPosts(String userId) {
+        User user = findById(userId);
+        return user.getPosts().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public PostDTO convertToDTO(Post post) {
+        PostDTO dto = new PostDTO();
+        dto.setId(post.getId());
+        dto.setTitle(post.getTitle());
+        dto.setLikes(post.getLikes());
+        dto.setDescription(post.getDescription());
+        dto.setDate(post.getDate());
+        dto.setComments(post.getComments());
+        dto.setAuthorId(post.getAuthor().getId());
+        dto.setAuthorName(post.getAuthor().getName());
+        return dto;
+    }
+
 }

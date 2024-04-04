@@ -1,6 +1,7 @@
 package org.conectechgroup.conectech.controller;
 
 import org.conectechgroup.conectech.model.Post;
+import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.model.User;
 import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
@@ -25,6 +26,7 @@ public class UserController {
     @PostMapping("/{id}/posts")
     public ResponseEntity<Void> addPostToUser(@PathVariable String id, @RequestBody Post post) {
         User user = service.findById(id);
+        post.setAuthor(user);
         post = postService.insert(post); // Save the post in the PostRepository
         user.getPosts().add(post);
         service.update(user);
@@ -65,8 +67,8 @@ public class UserController {
     }
 
     @RequestMapping(value="/{id}/posts", method=RequestMethod.GET)
-    public ResponseEntity<List<Post>> getPosts(@PathVariable String id) {
-        User obj = service.findById(id);
-        return ResponseEntity.ok().body(obj.getPosts());
+    public ResponseEntity<List<PostDTO>> getPosts(@PathVariable String id) {
+        List<PostDTO> posts = service.getPosts(id);
+        return ResponseEntity.ok().body(posts);
     }
 }
