@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.xml.stream.events.Comment;
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,6 @@ public class Post implements java.io.Serializable {
     @Id
     private Integer id;
     private String title;
-    private Blob image;
     private int likes;
     private int ncomments;
     private String description;
@@ -27,13 +25,16 @@ public class Post implements java.io.Serializable {
     public Post() {
     }
 
-    public Post(Integer id, String title, Blob image, String description, Date date) {
+    public Post(Integer id, String title, int likes, int ncomments, String description, Date date, List<Comment> comments) {
         this.id = id;
         this.title = title;
-        this.image = image;
+        this.likes = likes;
+        this.ncomments = ncomments;
         this.description = description;
         this.date = date;
+        this.comments = comments;
     }
+
     //#region Getters and Setters
     public Integer getId() {
         return id;
@@ -49,14 +50,6 @@ public class Post implements java.io.Serializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Blob getImage() {
-        return image;
-    }
-
-    public void setImage(Blob image) {
-        this.image = image;
     }
 
     public int getLikes() {
