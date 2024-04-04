@@ -28,6 +28,7 @@ public class UserController {
         post = postService.insert(post); // Save the post in the PostRepository
         user.getPosts().add(post);
         service.update(user);
+        service.addPostToUser(id, post); // Save the post in the UserRepository
         return ResponseEntity.noContent().build();
     }
 

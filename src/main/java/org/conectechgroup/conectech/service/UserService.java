@@ -2,6 +2,7 @@ package org.conectechgroup.conectech.service;
 
 import com.mongodb.DuplicateKeyException;
 import org.conectechgroup.conectech.model.User;
+import org.conectechgroup.conectech.model.Post; // Added import statement for Post
 import org.conectechgroup.conectech.repository.UserRepository;
 import org.conectechgroup.conectech.service.exception.ObjectNotFoundException;
 import org.conectechgroup.conectech.service.exception.UserAlreadyExistsException;
@@ -49,6 +50,11 @@ public class UserService {
         newObj.setDateOfBirth(obj.getDateOfBirth());
         newObj.setCpfcnpj(obj.getCpfcnpj());
         newObj.setPassword(obj.getPassword());
-        newObj.setPosts(obj.getPosts());
+    }
+
+    public User addPostToUser(String userId, Post post) {
+        User user = findById(userId);
+        user.getPosts().add(post); // Ensure getPosts() returns List<Post>
+        return repo.save(user);
     }
 }
