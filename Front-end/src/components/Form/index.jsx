@@ -7,66 +7,38 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
-
 import Botao from '../Botao'
 import { ImgLogo } from './style';
 import { useState } from 'react';
 import { stylesForm } from './style';
-// import validator from 'validator';
-
-
-
+import {useForm} from 'react-hook-form'
+import {isEmail} from 'validator';
 
 
 function Form() {
-
-    const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [senha, setSenha] = useState('');
-
-    const usuarios = [
-        {email: 'felipe@gmail.com', senha: 'varefe25'},
-        {email: 'lara@gmail.com', senha: 'larinha123'}
-    ]
-
-    const validatePassword = (senha) => {
-        
-    }
-
-    // aqui é o submit do form, que só acontece se emailerror for false, ou seja, não existir erro no email
-    const submitForm = (event) => {
-        event.preventDefault();
-        if(!emailError){
-            alert('Formulário enviado')
-            setEmail('')
-        }else{
-            alert('Preencha todos os campos antes de entrar!')
-        }
-        
-    }
-    // aqui ele está pegando o que está sendo escrito no input email e armazenando em email
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
-      
-    }
-    // aqui ele mostra o erro no input se o email for inválido apenas ao clicarmos fora no input, e armazena em emailerror
-    const handleEmailBlur = () => {
-        if(!isValidEmail(event.target.value)) {
-            setEmailError('Insira um email válido.')
-        }else {
-            setEmailError('');
-        }
-    }
-    // aqui é a validação do email
-    const isValidEmail = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-    
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show)
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     }
+    //ao criarmos a API REST, os usuarios virão do Banco de Dados
+    const usuarios = [
+        {id: 1, email: 'felipe@gmail.com', senha: '12345678'},
+        {id: 2, email: 'larinha@gmail.com', senha: 'laralinda'}
+    ]
+    const {
+        register,
+        handleSubmit,
+        reset, 
+        formState: { errors },
+    } = useForm();
+
+    const onSubmit = (data) => {
+        alert(JSON.stringify(data))
+        reset();
+    }
+
+    
     return (
         
        <Box component='div' sx={stylesForm.div}>
@@ -76,8 +48,7 @@ function Form() {
                 sx={stylesForm.form}
                 autoComplete='off'
                 noValidate
-                onSubmit={submitForm}
-                
+                onSubmit={handleSubmit(onSubmit)}
                 >
                 <ImgLogo src='images/img-telainicial.png'/>
                 <FormControl sx={stylesForm.inputDiv} variant='standart'>
@@ -85,14 +56,20 @@ function Form() {
                     <Input
                         id="outlined-password-input"
                         type='email'
-                        value={email}
-                        onChange={handleEmailChange}
-                        onBlur={handleEmailBlur}
-                        error={!!emailError}
+                        
+                        {...register('email', {
+                            required: true,
+                            validate: (value) => isEmail(value) && usuarios.some(user => user.email === value),
+                           
+                            
+                        })}
+                        
+                        error={errors.email ? true : false}
                         sx={stylesForm.inputField}
-                       
+                        
                     />
-                  <FormHelperText sx={stylesForm.mensagemErro}>{emailError}</FormHelperText>
+                  {errors?.email?.type === 'required' && <FormHelperText sx={stylesForm.mensagemErro}>O email é obrigatório.</FormHelperText> }
+                  {errors?.email?.type === 'validate' && <FormHelperText sx={stylesForm.mensagemErro}>O email está incorreto.</FormHelperText> }
                 </FormControl>
                     
                     <FormControl sx={stylesForm.inputDiv} variant='standart'>
@@ -100,6 +77,12 @@ function Form() {
                     <Input
                         id="outlined-password-input"
                         type={showPassword ? 'text' : 'password'}
+                        {...register('password', {
+                            required: true, 
+                            minLength: 8,
+                            validate: (value) => usuarios.some(user => user.senha === value),
+                        })}
+                        error={errors.password ? true : false}
                         sx={stylesForm.inputField}
                         endAdornment={
                             <InputAdornment>
@@ -117,11 +100,13 @@ function Form() {
                             </InputAdornment>
                         }
                     />
-                  
+                    {errors?.password?.type === 'required' && <FormHelperText sx={stylesForm.mensagemErro}>Senha é obrigatória.</FormHelperText> }
+                    {errors?.password?.type === 'minLength' && <FormHelperText sx={stylesForm.mensagemErro}>Senha precisa ter no mínimo 8 caracteres.</FormHelperText>}
+                    {errors?.password?.type === 'validate' &&  <FormHelperText sx={stylesForm.mensagemErro}>O email ou senha estão incorretos.</FormHelperText> }  
                     </FormControl>
                    
                   
-                <Botao type='submit' padding='0.8rem 5rem' nome='Entrar'/>
+                <Botao type='submit'  padding='0.8rem 5rem' nome='Entrar'/>
             </Box>       
                     
        </Box>
