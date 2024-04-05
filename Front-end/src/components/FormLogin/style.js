@@ -1,9 +1,28 @@
 import styled from "styled-components";
 
+export const TituloLogin = styled.h2`
+     color: #f3f3f3;
+    font-family: "Poppins", sans-serif;
+    
+`
+
 export const ImgLogo = styled.img`
     max-width: 6rem;
     height: 6rem;
        
+`
+
+export const ParagrafoCadastro = styled.p`
+    color: #f3f3f3;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    
+`
+export const LinkCadastro = styled.a`
+    text-decoration: underline;
+    color: #0B7FBE;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
 `
 export const stylesForm = {
     div: {
@@ -13,8 +32,11 @@ export const stylesForm = {
         alignItems:'center',
         flexDirection:'column',
         height:'100%',
+        marginBottom: '1rem',
+       
         '@media (min-width:1500px)':{
-             height: '100vh'
+             marginTop: '-2rem',
+             
         }
     },
     form: {
@@ -23,7 +45,7 @@ export const stylesForm = {
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
-        padding:'1rem',
+        padding:'2.5rem',
         border:'1px solid #f3f3f3',
         gap: '2rem',
         borderRadius:'10px',
@@ -31,10 +53,9 @@ export const stylesForm = {
         boxShadow: '0 8px 32px 0 #1f26875e',
         backdropFilter: 'blur( 13.5px )',
         WebkitBackdropFilter: 'blur( 13.5px )',
-        marginTop:'3rem',
-        marginBottom:'3rem',
+        
+        
         '@media (min-width:1500px)':{
-            marginTop: '0rem',
             padding:'3rem'
         }
     },
@@ -45,10 +66,13 @@ export const stylesForm = {
         }
     },
     inputLabel: {
-        color:'#f3f3f3'
+        color:'#f3f3f3',
+        fontFamily: 'Poppins' 
+    
     },
     inputField:{
         color: '#f3f3f3',
+        fontFamily: 'Poppins' ,
         '&::before': {
         borderBottom: '2px solid #E0E3E7'},
         '&:hover:not(.Mui-disabled, .Mui-error):before': {

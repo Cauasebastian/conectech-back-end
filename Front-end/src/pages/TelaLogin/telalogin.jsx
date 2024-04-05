@@ -1,15 +1,9 @@
-import Form from '../../components/Form'
-import Header from '../../components/header'
+import Form from '../../components/FormLogin'
 import { DivLogin } from './style'
 
-
 const TelaLogin = () => {
-    const itensHeader = [
-          
-    ]
     return(
         <DivLogin>
-            <Header  itens={itensHeader} />
             <Form/>
         </DivLogin>
     )

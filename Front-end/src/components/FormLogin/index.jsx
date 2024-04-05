@@ -8,14 +8,19 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import Botao from '../Botao'
-import { ImgLogo } from './style';
 import { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
 import { stylesForm } from './style';
 import {useForm} from 'react-hook-form'
 import {isEmail} from 'validator';
+import { ImgLogo, ParagrafoCadastro, LinkCadastro,TituloLogin } from './style';
 
 
 function Form() {
+    const navigate = useNavigate();
+    const goToTelaCadastro = () => {
+        navigate('/cadastro')
+     }
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show)
     const handleMouseDownPassword = (event) => {
@@ -42,7 +47,7 @@ function Form() {
     return (
         
        <Box component='div' sx={stylesForm.div}>
-                   
+                    <TituloLogin>Login</TituloLogin> 
             <Box 
                 component='form' 
                 sx={stylesForm.form}
@@ -54,9 +59,7 @@ function Form() {
                 <FormControl sx={stylesForm.inputDiv} variant='standart'>
                     <InputLabel sx={stylesForm.inputLabel} htmlFor='standart-adornment-password'>Email</InputLabel>
                     <Input
-                        id="outlined-password-input"
                         type='email'
-                        
                         {...register('email', {
                             required: true,
                             validate: (value) => isEmail(value) && usuarios.some(user => user.email === value),
@@ -108,7 +111,7 @@ function Form() {
                   
                 <Botao type='submit'  padding='0.8rem 5rem' nome='Entrar'/>
             </Box>       
-                    
+            <ParagrafoCadastro>Ainda não tem cadastro? <LinkCadastro onClick={goToTelaCadastro}>Cadastre-se</LinkCadastro></ParagrafoCadastro>  
        </Box>
        
 

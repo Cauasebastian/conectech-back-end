@@ -1,8 +1,14 @@
+import { DivCadastro } from "./style"
+import FormCadastro from "../../components/FormCadastro"
 
-const TelaLogin = () => {
+
+const TelaCadastro = () => {
+    
     return(
-        <h1>Tela Cadastro</h1>
+        <DivCadastro>
+            <FormCadastro/>
+        </DivCadastro>
     )
 }
 
-export default TelaLogin
+export default TelaCadastro
