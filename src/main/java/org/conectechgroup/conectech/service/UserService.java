@@ -22,6 +22,9 @@ public class UserService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private PostService postService;
+
 
     public List<User> findAll() {
         return repo.findAll();
@@ -83,6 +86,12 @@ public class UserService {
         dto.setAuthorId(post.getAuthor().getId());
         dto.setAuthorName(post.getAuthor().getName());
         return dto;
+    }
+    public Post updatePostTitleAndDescription(String postId, String newTitle, String newDescription) {
+        Post post = postService.findById(Integer.parseInt(postId)); // Parse String to Integer
+        post.setTitle(newTitle);
+        post.setDescription(newDescription);
+        return postService.save(post);
     }
 
 }
