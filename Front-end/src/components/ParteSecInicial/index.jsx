@@ -14,17 +14,17 @@ const ParteSecundaria = () => {
             <div className='itens-list'>
                 
                 <div className='card-list'>
-                    <img src="../../../public/images/img-groups.png" alt="" />
+                    <img src="images/img-groups.png" alt="" />
                     <h3 className='titulo-card'>Grupos</h3>
                     <p>Crie vínculos</p>
                 </div>
                 <div className='card-list'>
-                    <img src="../../../public/images/img-foruns.png" alt="" />
+                    <img src="images/img-foruns.png" alt="" />
                     <h3 className='titulo-card'>Fóruns</h3>
                     <p>Discuta sobre temas</p>
                 </div>
                 <div className='card-list'>
-                    <img src="../../../public/images/img-events.png" alt="" />
+                    <img src="images/img-events.png" alt="" />
                     <h3 className='titulo-card'>Eventos</h3>
                     <p>Participe de eventos</p>
                 </div>
