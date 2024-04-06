@@ -68,14 +68,6 @@ public class PostDTO {
         this.date = date;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     public String getAuthorId() {
         return authorId;
     }
@@ -90,5 +82,13 @@ public class PostDTO {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+
+
+    public void setComments(List<org.conectechgroup.conectech.model.Comment> comments) {
     }
 }

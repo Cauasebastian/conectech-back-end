@@ -87,4 +87,6 @@ public class PostService {
         repo.deleteById(id);
     }
 
+    public void delete(int i) {
+    }
 }

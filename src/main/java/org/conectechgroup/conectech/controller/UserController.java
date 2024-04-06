@@ -1,5 +1,6 @@
 package org.conectechgroup.conectech.controller;
 
+import org.conectechgroup.conectech.model.Comment;
 import org.conectechgroup.conectech.model.Post;
 import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.model.User;
@@ -191,4 +192,18 @@ public class UserController {
         postService.save(post);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/{id}/posts/{postId}/comment")
+    public ResponseEntity<Void> addCommentToPost(@PathVariable String id, @PathVariable String postId, @RequestBody Comment comment) {
+        User user = service.findById(id);
+        Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+        comment.setAuthor(user);
+        comment.setPost(post);
+        post.getComments().add(comment);
+        postService.save(post);
+        return ResponseEntity.noContent().build();
+    }
+
 }

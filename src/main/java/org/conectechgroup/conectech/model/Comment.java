@@ -1,9 +1,10 @@
 package org.conectechgroup.conectech.model;
 
-import java.time.LocalDateTime;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Document(collection = "comments")
 public class Comment implements java.io.Serializable {
@@ -81,6 +82,7 @@ public class Comment implements java.io.Serializable {
         }
         this.likes = likes;
     }
+    
 
     // Methods to increment and decrement likes
     public void like() {
@@ -91,5 +93,8 @@ public class Comment implements java.io.Serializable {
         if (likes > 0) {
             likes--;
         }
+    }
+
+    public void setPost(Post post) {
     }
 }
