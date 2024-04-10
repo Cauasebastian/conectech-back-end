@@ -228,6 +228,78 @@ public class UserController {
         }
         return ResponseEntity.ok().body(post.getComments());
     }
+    @GetMapping("/{id}/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<Comment> getComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
+        User user = service.findById(id);
+        Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Comment comment = post.getComments().stream().filter(c -> c.getId().equals(commentId)).findFirst().orElse(null);
+        if (comment == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(comment);
+    }
+    @PutMapping("/{id}/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<Void> updateComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId, @RequestBody Comment comment) {
+        User user = service.findById(id);
+        Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Comment oldComment = post.getComments().stream().filter(c -> c.getId().equals(commentId)).findFirst().orElse(null);
+        if (oldComment == null) {
+            return ResponseEntity.notFound().build();
+        }
 
+        // Atualizar os campos do comentário existente
+        oldComment.setTitle(comment.getTitle());
+        oldComment.setContent(comment.getContent());
+        oldComment.setDate(LocalDateTime.now()); // Atualizar a data do comentário para a data atual
+
+        // Salvar o comentário atualizado
+        commentService.save(oldComment);
+
+        return ResponseEntity.noContent().build();
+    }
+    @DeleteMapping("/{id}/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
+        User user = service.findById(id);
+        Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Comment comment = post.getComments().stream().filter(c -> c.getId().equals(commentId)).findFirst().orElse(null);
+        if (comment == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Remover o comentário do post
+        post.getComments().remove(comment);
+
+        // Atualizar o post no banco de dados
+        postService.save(post);
+
+        // Deletar o comentário
+        commentService.delete(Integer.parseInt(commentId));
+
+        return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/{id}/posts/{postId}/comments/{commentId}/like")
+    public ResponseEntity<Void> likeComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
+        User user = service.findById(id);
+        Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Comment comment = post.getComments().stream().filter(c -> c.getId().equals(commentId)).findFirst().orElse(null);
+        if (comment == null) {
+            return ResponseEntity.notFound().build();
+        }
+        comment.setLikes(comment.getLikes() + 1);
+        commentService.save(comment);
+        return ResponseEntity.noContent().build();
+    }
 
 }
