@@ -204,8 +204,8 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         comment.setAuthor(user);
+        comment.setDate(LocalDateTime.now()); // Set the current date and time
         comment.setPost(post);
-        comment.setDate(LocalDateTime.now());
         comment = commentService.insert(comment);
 
         post.getComments().add(comment);
