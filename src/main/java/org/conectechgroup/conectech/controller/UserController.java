@@ -196,7 +196,7 @@ public class UserController {
         postService.save(post);
         return ResponseEntity.noContent().build();
     }
-    @PostMapping("/{id}/posts/{postId}/comment")
+    @PostMapping("/{id}/posts/{postId}/comments")
     public ResponseEntity<Void> addCommentToPost(@PathVariable String id, @PathVariable String postId, @RequestBody Comment comment) {
         User user = service.findById(id);
         Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
@@ -205,13 +205,29 @@ public class UserController {
         }
         comment.setAuthor(user);
         comment.setDate(LocalDateTime.now()); // Set the current date and time
-        comment.setPost(post);
+        comment.setPost(post); // Configura o post para o comentário
+
+        // Salva o comentário
         comment = commentService.insert(comment);
 
+        // Adiciona o comentário ao post
         post.getComments().add(comment);
-        postService.save(post); // Save the post before saving the comment
-        commentService.save(comment); // Save the comment after the post has been saved
+
+        // Atualiza o post no banco de dados
+        postService.save(post);
+
+        // Retorna uma resposta de sucesso
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/{id}/posts/{postId}/comments")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable String id, @PathVariable String postId) {
+        User user = service.findById(id);
+        Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(post.getComments());
+    }
+
 
 }

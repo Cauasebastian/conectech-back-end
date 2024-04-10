@@ -23,9 +23,8 @@ public class Comment implements java.io.Serializable {
 
     private String content;
     private int likes;
-
-    @JsonBackReference(value="post-comment")   //avoid infinite recursion
-    private List<Post> posts = new ArrayList<>();
+    @JsonBackReference(value="post-comment") // Se dar error de incompatible media type provavelmente é nesses json reference/managed
+    private Post post;
 
     public Comment(String id, User author, LocalDateTime date, String content, int likes) {
         this.id = id;
@@ -108,5 +107,10 @@ public class Comment implements java.io.Serializable {
     }
 
     public void setPost(Post post) {
+        if (post == null) {
+            throw new IllegalArgumentException("Post cannot be null");
+        }
+        this.post = post;
     }
+
 }
