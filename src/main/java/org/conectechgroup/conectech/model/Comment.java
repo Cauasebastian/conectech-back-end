@@ -1,10 +1,14 @@
 package org.conectechgroup.conectech.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "comments")
 public class Comment implements java.io.Serializable {
@@ -12,12 +16,16 @@ public class Comment implements java.io.Serializable {
 
     @Id
     private String id;
-    @DBRef(lazy = true)
+    @JsonBackReference(value="author-comment")
     private User author;
-
     private LocalDateTime date;
+    private String Title;
+
     private String content;
     private int likes;
+
+    @JsonBackReference(value="post-comment")   //avoid infinite recursion
+    private List<Post> posts = new ArrayList<>();
 
     public Comment(String id, User author, LocalDateTime date, String content, int likes) {
         this.id = id;
@@ -39,8 +47,12 @@ public class Comment implements java.io.Serializable {
         this.id = id;
     }
 
-    public User getAuthor() {
-        return author;
+    public String getTitle() {
+        return Title;
+    }
+
+    public void setTitle(String title) {
+        Title = title;
     }
 
     public void setAuthor(User author) {

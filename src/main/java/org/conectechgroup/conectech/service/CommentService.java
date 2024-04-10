@@ -43,4 +43,12 @@ public class CommentService {
         comment.setId(id);
         return commentRepository.save(comment);
     }
+    public Comment save(Comment comment){
+        return commentRepository.save(comment);
+    }
+    public List<Comment> findByAuthorId(String authorId){
+        return commentRepository.findByAuthorId(authorId);
+    }
+
+
 }

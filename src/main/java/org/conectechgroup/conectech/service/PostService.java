@@ -89,4 +89,14 @@ public class PostService {
 
     public void delete(int i) {
     }
+    /**
+     * Updates a post.
+     *
+     * @param post the post to update
+     * @return the updated post
+     */
+    public Post update(Post post) {
+        return repo.save(post);
+    }
+
 }

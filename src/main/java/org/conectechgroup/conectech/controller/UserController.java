@@ -4,6 +4,7 @@ import org.conectechgroup.conectech.model.Comment;
 import org.conectechgroup.conectech.model.Post;
 import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.model.User;
+import org.conectechgroup.conectech.service.CommentService;
 import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -26,6 +28,8 @@ public class UserController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private CommentService commentService;
 
     /**
      * Adds a post to a user.
@@ -201,8 +205,12 @@ public class UserController {
         }
         comment.setAuthor(user);
         comment.setPost(post);
+        comment.setDate(LocalDateTime.now());
+        comment = commentService.insert(comment);
+
         post.getComments().add(comment);
-        postService.save(post);
+        postService.save(post); // Save the post before saving the comment
+        commentService.save(comment); // Save the comment after the post has been saved
         return ResponseEntity.noContent().build();
     }
 

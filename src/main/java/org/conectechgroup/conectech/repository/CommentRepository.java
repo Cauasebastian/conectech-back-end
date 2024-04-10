@@ -11,6 +11,8 @@ import java.util.List;
 public interface CommentRepository extends MongoRepository<Comment, Integer> {
     List<Comment> findByPostId(Integer postId);
 
+    List<Comment> findByAuthorId(String authorId);
+
     //find by postid
     
     
