@@ -118,4 +118,43 @@ public class PostController {
         // Retorna uma resposta de sucesso
         return ResponseEntity.noContent().build();
     }
+    // Endpoint para comentar outro post
+    @PostMapping("/{id}/posts/{postId}/comments")
+    public ResponseEntity<Void> addCommentToPost(@PathVariable String id, @PathVariable String postId, @RequestBody Comment comment) {
+        // Encontra o usuário que está comentando o post
+        User user = userService.findById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Encontra o post pelo ID
+        Post post = postService.findById(postId);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Cria um novo comentário com o conteúdo fornecido e define o autor como o usuário atual
+        comment.setContent(comment.getContent());
+        comment.setTitle(comment.getTitle());
+        comment.setAuthor(user);
+        comment.setDate(LocalDateTime.now()); // Define a data e hora atual
+
+        // Define o post para o comentário
+        comment.setPost(post);
+
+        // Salva o comentário
+        comment = commentService.insert(comment);
+
+        // Adiciona o comentário ao post
+        post.getComments().add(comment);
+
+        // Salva o comentário
+        commentService.save(comment);
+
+        // Salva o post
+        postService.save(post);
+
+        // Retorna uma resposta de sucesso
+        return ResponseEntity.noContent().build();
+    }
 }
