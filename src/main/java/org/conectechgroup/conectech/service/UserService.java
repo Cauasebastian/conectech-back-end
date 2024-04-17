@@ -145,7 +145,7 @@ public class UserService {
      * @return The updated post object.
      */
     public Post updatePostTitleAndDescription(String postId, String newTitle, String newDescription) {
-        Post post = postService.findById(Integer.parseInt(postId)); // Parse String to Integer
+        Post post = postService.findById(postId); // Parse String to Integer
         post.setTitle(newTitle);
         post.setDescription(newDescription);
         return postService.save(post);

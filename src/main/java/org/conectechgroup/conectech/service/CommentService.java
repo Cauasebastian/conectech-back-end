@@ -13,7 +13,7 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Comment findById(Integer id){
+    public Comment findById(String id){
         return commentRepository.findById(id).orElse(null);
     }
 
@@ -21,7 +21,7 @@ public class CommentService {
         return commentRepository.findAll();
     }
 
-    public List<Comment> findByPostId(Integer postId){
+    public List<Comment> findByPostId(String postId){
         return commentRepository.findByPostId(postId);
     }
 
@@ -29,14 +29,14 @@ public class CommentService {
         return commentRepository.insert(comment);
     }
 
-    public void delete(Integer id){
+    public void delete(String id){
         commentRepository.deleteById(id);
     }
 
     public Comment update(Comment comment){
         return commentRepository.save(comment);
     }
-    public void deleteComment(Integer id) {
+    public void deleteComment(String id) {
         commentRepository.deleteById(id);
     }
     public Comment updateComment(String id, Comment comment) {

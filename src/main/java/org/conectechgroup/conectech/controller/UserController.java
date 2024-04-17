@@ -8,6 +8,7 @@ import org.conectechgroup.conectech.service.CommentService;
 import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -282,7 +283,7 @@ public class UserController {
         postService.save(post);
 
         // Deletar o comentário
-        commentService.delete(Integer.parseInt(commentId));
+        commentService.delete(commentId);
 
         return ResponseEntity.noContent().build();
     }
@@ -301,5 +302,4 @@ public class UserController {
         commentService.save(comment);
         return ResponseEntity.noContent().build();
     }
-
 }

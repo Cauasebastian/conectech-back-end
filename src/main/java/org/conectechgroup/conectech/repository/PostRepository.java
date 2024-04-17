@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends MongoRepository<Post, Integer> {
+public interface PostRepository extends MongoRepository<Post, String> {
 
     @Query("{ 'title': { $regex: ?0, $options: 'i' } }")
     List<Post> searchTitle(String title);

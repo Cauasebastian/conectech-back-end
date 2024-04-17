@@ -34,6 +34,9 @@ public class Comment implements java.io.Serializable {
         this.likes = likes;
     }
 
+    public Comment() {
+    }
+
     // Getters and setters with validation
     public String getId() {
         return id;

@@ -23,7 +23,7 @@ public class PostService {
      * @param id the id of the post
      * @return the post if found, null otherwise
      */
-    public Post findById(Integer id){
+    public Post findById(String id){
         return repo.findById(id).orElse(null);
     }
 
