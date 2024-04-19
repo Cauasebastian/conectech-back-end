@@ -1,6 +1,7 @@
 package org.conectechgroup.conectech.service;
 
 import org.conectechgroup.conectech.model.Post;
+import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,6 +98,24 @@ public class PostService {
      */
     public Post update(Post post) {
         return repo.save(post);
+    }
+
+    /**
+     * Converts a Post object to PostDTO.
+     * @param post The post object to be converted.
+     * @return The converted PostDTO object.
+     */
+    public PostDTO convertToDTO(Post post) {
+        PostDTO dto = new PostDTO();
+        dto.setId(post.getId());
+        dto.setTitle(post.getTitle());
+        dto.setLikes(post.getLikes());
+        dto.setDescription(post.getDescription());
+        dto.setDate(post.getDate());
+        dto.setCommentsCount(post.getComments().size()); // Set the comments count
+        dto.setAuthorId(post.getAuthor().getId());
+        dto.setAuthorName(post.getAuthor().getName());
+        return dto;
     }
 
 }

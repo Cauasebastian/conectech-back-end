@@ -1,6 +1,7 @@
 package org.conectechgroup.conectech.service;
 
 import org.conectechgroup.conectech.model.Comment;
+import org.conectechgroup.conectech.model.CommentDTO;
 import org.conectechgroup.conectech.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,13 @@ public class CommentService {
         return commentRepository.findByAuthorId(authorId);
     }
 
+    //convert to DTO
+    public CommentDTO convertToDTO(Comment comment){
+        CommentDTO dto = new CommentDTO();
+        dto.setId(comment.getId());
+        dto.setContent(comment.getContent());
+        dto.setAuthorName(comment.getAuthor().getName());
+        return dto;
+    }
 
 }
