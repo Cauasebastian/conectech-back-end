@@ -20,6 +20,7 @@ public class User implements java.io.Serializable{
     private Date dateOfBirth;
     private String Cpfcnpj;
     private String password;
+    private String gender;
 
     @DBRef(lazy = true)
     @JsonManagedReference // Evita recursividade infinita
@@ -27,13 +28,14 @@ public class User implements java.io.Serializable{
 
     public User() {
     }
-    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password) {
+    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password,String gender) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         Cpfcnpj = cpfcnpj;
         this.password = password;
+        this.gender = gender;
     }
 
     public String getId() {
@@ -90,6 +92,14 @@ public class User implements java.io.Serializable{
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public User orElseThrow(Object userNotFound) {

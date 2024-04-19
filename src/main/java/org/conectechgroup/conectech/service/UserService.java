@@ -4,6 +4,7 @@ import com.mongodb.DuplicateKeyException;
 import org.conectechgroup.conectech.model.Post;
 import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.model.User;
+import org.conectechgroup.conectech.model.UserDTO;
 import org.conectechgroup.conectech.repository.PostRepository;
 import org.conectechgroup.conectech.repository.UserRepository;
 import org.conectechgroup.conectech.service.exception.ObjectNotFoundException;
@@ -29,11 +30,14 @@ public class UserService {
     private PostService postService;
 
     /**
-     * Fetches all users.
+     * Fetches all users on the DTO format.
      * @return List of all users.
      */
-    public List<User> findAll() {
-        return repo.findAll();
+    public List<UserDTO> findAll() {
+        //return users in DTO format
+        return repo.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -92,6 +96,7 @@ public class UserService {
         newObj.setDateOfBirth(obj.getDateOfBirth());
         newObj.setCpfcnpj(obj.getCpfcnpj());
         newObj.setPassword(obj.getPassword());
+        newObj.setGender(obj.getGender());
     }
 
     /**
@@ -115,40 +120,8 @@ public class UserService {
     public List<PostDTO> getPosts(String userId) {
         User user = findById(userId);
         return user.getPosts().stream()
-                .map(this::convertToDTO)
+                .map(postService::convertToDTO) // Use PostService to convert Post to PostDTO
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Converts a Post object to PostDTO.
-     * @param post The post object to be converted.
-     * @return The converted PostDTO object.
-     */
-    public PostDTO convertToDTO(Post post) {
-        PostDTO dto = new PostDTO();
-        dto.setId(post.getId());
-        dto.setTitle(post.getTitle());
-        dto.setLikes(post.getLikes());
-        dto.setDescription(post.getDescription());
-        dto.setDate(post.getDate());
-        dto.setComments(post.getComments());
-        dto.setAuthorId(post.getAuthor().getId());
-        dto.setAuthorName(post.getAuthor().getName());
-        return dto;
-    }
-
-    /**
-     * Updates the title and description of a post.
-     * @param postId The id of the post.
-     * @param newTitle The new title.
-     * @param newDescription The new description.
-     * @return The updated post object.
-     */
-    public Post updatePostTitleAndDescription(String postId, String newTitle, String newDescription) {
-        Post post = postService.findById(postId); // Parse String to Integer
-        post.setTitle(newTitle);
-        post.setDescription(newDescription);
-        return postService.save(post);
     }
 
     /**
@@ -157,5 +130,17 @@ public class UserService {
      */
     public void deletePost(String postId) {
         postService.delete(Integer.parseInt(postId)); // Parse String to Integer
+    }
+
+    //convert user to DTO
+    public UserDTO convertToDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setPosts(user.getPosts().size());
+        dto.setBirthDate(user.getDateOfBirth());
+        dto.setGender(user.getGender());
+        return dto;
     }
 }

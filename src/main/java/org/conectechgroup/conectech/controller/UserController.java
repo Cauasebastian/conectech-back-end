@@ -1,9 +1,6 @@
 package org.conectechgroup.conectech.controller;
 
-import org.conectechgroup.conectech.model.Comment;
-import org.conectechgroup.conectech.model.Post;
-import org.conectechgroup.conectech.model.PostDTO;
-import org.conectechgroup.conectech.model.User;
+import org.conectechgroup.conectech.model.*;
 import org.conectechgroup.conectech.service.CommentService;
 import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
@@ -16,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * UserController is a REST controller that handles HTTP requests related to User entities.
@@ -51,13 +49,13 @@ public class UserController {
     }
 
     /**
-     * Retrieves all users.
+     * Retrieves all users in the DTO format.
      *
      * @return a ResponseEntity containing a list of all users
      */
     @RequestMapping(method= RequestMethod.GET)
-    public ResponseEntity<List<User>> findAll() {
-        List<User> list = service.findAll();
+    public ResponseEntity<List<UserDTO>> findAll() {
+        List<UserDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -113,7 +111,7 @@ public class UserController {
     }
 
     /**
-     * Retrieves the posts of a user by id.
+     * Retrieves the posts of a user by id in the DTO format.
      *
      * @param id the id of the user
      * @return a ResponseEntity containing a list of the user's posts
@@ -125,7 +123,7 @@ public class UserController {
     }
 
     /**
-     * Retrieves a post of a user by id.
+     * Precisa corrigir a formatação do Json .
      *
      * @param id     the id of the user
      * @param postId the id of the post
@@ -180,7 +178,7 @@ public class UserController {
     }
 
     /**
-     * Likes a post of a user by id.
+     * Change The Controller to PostController
      *
      * @param id     the id of the user
      * @param postId the id of the post
@@ -197,6 +195,7 @@ public class UserController {
         postService.save(post);
         return ResponseEntity.noContent().build();
     }
+
     @PostMapping("/{id}/posts/{postId}/comments")
     public ResponseEntity<Void> addCommentToPost(@PathVariable String id, @PathVariable String postId, @RequestBody Comment comment) {
         User user = service.findById(id);
@@ -221,16 +220,20 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/{id}/posts/{postId}/comments")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable String id, @PathVariable String postId) {
+    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable String id, @PathVariable String postId) {
         User user = service.findById(id);
         Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
         if (post == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(post.getComments());
+        List<CommentDTO> commentDTOs = post.getComments().stream()
+                .map(commentService::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(commentDTOs);
     }
+
     @GetMapping("/{id}/posts/{postId}/comments/{commentId}")
-    public ResponseEntity<Comment> getComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
+    public ResponseEntity<CommentDTO> getComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
         User user = service.findById(id);
         Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
         if (post == null) {
@@ -240,7 +243,8 @@ public class UserController {
         if (comment == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(comment);
+        CommentDTO commentDTO = commentService.convertToDTO(comment);
+        return ResponseEntity.ok().body(commentDTO);
     }
     @PutMapping("/{id}/posts/{postId}/comments/{commentId}")
     public ResponseEntity<Void> updateComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId, @RequestBody Comment comment) {
@@ -264,6 +268,7 @@ public class UserController {
 
         return ResponseEntity.noContent().build();
     }
+
     @DeleteMapping("/{id}/posts/{postId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
         User user = service.findById(id);
