@@ -3,6 +3,8 @@ package org.conectechgroup.conectech.controller;
 import org.conectechgroup.conectech.model.Post;
 import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.model.User;
+import org.conectechgroup.conectech.model.Comment;
+import org.conectechgroup.conectech.service.CommentService;
 import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
 import org.conectechgroup.conectech.service.util.URL;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,11 +24,13 @@ public class PostController {
     private UserService userService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostDTO> findById(@PathVariable String id) {
-        Post post = postService.findById(Integer.parseInt(id)); // Parse String to Integer
-        PostDTO postDTO = userService.convertToDTO(post);
+        Post post = postService.findById(id); // Parse String to Integer
+        PostDTO postDTO = postService.convertToDTO(post);
         return ResponseEntity.ok().body(postDTO);
     }
 
@@ -43,7 +48,7 @@ public class PostController {
     public ResponseEntity<List<PostDTO>> findAll() {
         List<Post> posts = postService.findALL();
         List<PostDTO> postDTOs = posts.stream()
-                .map(userService::convertToDTO)
+                .map(postService::convertToDTO) // Fixed here
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(postDTOs);
     }
@@ -52,7 +57,7 @@ public class PostController {
     public ResponseEntity<List<PostDTO>> findByTitle(@RequestParam String title) {
         List<Post> posts = postService.findByTitle(title);
         List<PostDTO> postDTOs = posts.stream()
-                .map(userService::convertToDTO)
+                .map(postService::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(postDTOs);
     }
@@ -67,7 +72,7 @@ public class PostController {
         Date max = URL.convertDate(maxDate, new Date());
         List<Post> posts = postService.fullSearch(text, min, max);
         List<PostDTO> postDTOs = posts.stream()
-                .map(userService::convertToDTO)
+                .map(postService::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(postDTOs);
     }
