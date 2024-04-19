@@ -116,4 +116,11 @@ public class Comment implements java.io.Serializable {
         this.post = post;
     }
 
+    public User getAuthor() {
+        return author;
+    }
+
+    public Post getPost() {
+        return post;
+    }
 }

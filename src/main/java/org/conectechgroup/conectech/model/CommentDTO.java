@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class CommentDTO {
     private String id;
-    private User author;
+    private String authorName;
     private LocalDateTime date;
     private String content;
     private int likes;
@@ -18,12 +18,11 @@ public class CommentDTO {
         this.id = id;
     }
 
-    public User getAuthor() {
-        return author;
+    public String getAuthorName() {
+        return authorName;
     }
-
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     public LocalDateTime getDate() {

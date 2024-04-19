@@ -10,22 +10,30 @@ public class PostDTO {
     private int likes;
     private String description;
     private Date date;
-    private List<Comment> comments;
+    private int commentsCount;
     private String authorId;
     private String authorName;
 
     public PostDTO() {
     }
 
-    public PostDTO(String id, String title, int likes, String description, Date date, List<Comment> comments, String authorId, String authorName) {
+    public PostDTO(String id, String title, int likes, String description, Date date, int commentsCount, String authorId, String authorName) {
         this.id = id;
         this.title = title;
         this.likes = likes;
         this.description = description;
         this.date = date;
-        this.comments = comments;
+        this.commentsCount = commentsCount;
         this.authorId = authorId;
         this.authorName = authorName;
+    }
+
+    public int getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
     }
 
     public String getId() {
@@ -83,11 +91,6 @@ public class PostDTO {
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
     }
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-
 
     public void setComments(List<org.conectechgroup.conectech.model.Comment> comments) {
     }
