@@ -1,12 +1,8 @@
 package org.conectechgroup.conectech.controller;
 
-import org.conectechgroup.conectech.model.Post;
-import org.conectechgroup.conectech.model.PostDTO;
-import org.conectechgroup.conectech.model.User;
-import org.conectechgroup.conectech.model.Comment;
-import org.conectechgroup.conectech.service.CommentService;
-import org.conectechgroup.conectech.service.PostService;
-import org.conectechgroup.conectech.service.UserService;
+import org.conectechgroup.conectech.model.*;
+import org.conectechgroup.conectech.model.DTO.PostDTO;
+import org.conectechgroup.conectech.service.*;
 import org.conectechgroup.conectech.service.util.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +22,10 @@ public class PostController {
     private PostService postService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private InterestService interestService;
+    @Autowired
+    private EventService eventService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostDTO> findById(@PathVariable String id) {
@@ -99,6 +99,7 @@ public class PostController {
         // Retorna uma resposta de sucesso
         return ResponseEntity.noContent().build();
     }
+
     // Endpoint para descurtir o post de outro usuário
     @PostMapping("/{id}/dislike/{postId}")
     public ResponseEntity<Void> dislikeOtherUserPost(@PathVariable String id, @PathVariable String postId) {
@@ -162,4 +163,64 @@ public class PostController {
         // Retorna uma resposta de sucesso
         return ResponseEntity.noContent().build();
     }
+
+   /**
+     * Endpoint para associar um post a uma tag
+     * @param postId ID do post
+     * @param tagName Nome da tag
+     * @return Resposta de sucesso
+     */
+    @PostMapping("{postId}/tag/{tagName}")
+    public ResponseEntity<Void> addTagToPost(@PathVariable String postId, @PathVariable String tagName) {
+        Post post = postService.findById(postId);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Interest interest = interestService.findByName(tagName);
+        if (interest == null) {
+            interest = new Interest();
+            interest.setName(tagName);
+            interest = interestService.insert(interest);
+        }
+
+        post.getTags().add(interest);
+        postService.save(post);
+        interestService.addPostToInterest(tagName, post);
+        return ResponseEntity.noContent().build();
+    }
+    
+    /**
+     * Endpoint para associar um post a um evento
+     * @param postId ID do post
+     * @param eventId ID do evento
+     * @return Resposta de sucesso
+     */
+    @PostMapping("{postId}/event/{eventId}")
+    public ResponseEntity<Void> addPostToEvent(@PathVariable String postId, @PathVariable String eventId) {
+        // Verifica se o post existe
+        Post post = postService.findById(postId);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Verifica se o evento existe
+        Event event = eventService.findById(eventId);
+        if (event == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Associa o evento ao post
+        post.setEvent(event);
+
+        // Adiciona o post ao evento
+        eventService.addPostToEvent(eventId, post);
+
+        // Salva o post
+        postService.save(post);
+
+        // Retorna uma resposta de sucesso
+        return ResponseEntity.noContent().build();
+    }
+
 }

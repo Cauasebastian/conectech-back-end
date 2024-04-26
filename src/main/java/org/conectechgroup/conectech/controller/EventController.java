@@ -59,14 +59,18 @@ public class EventController {
         EventDTO eventDTO = eventService.convertToDTO(newEvent);
         return ResponseEntity.ok().body(eventDTO);
     }
-    //update
+    //update only the tittle description and location
     @PutMapping(value = "/{id}")
-    public ResponseEntity<EventDTO> update(@PathVariable String id, @RequestBody Event event){
-        if(eventService.findById(id) == null){
+    public ResponseEntity<EventDTO> update(@RequestBody Event event, @PathVariable String id){
+        Event event1 = eventService.findById(id);
+        if(event1 == null){
             return ResponseEntity.notFound().build();
         }
-        Event updatedEvent = eventService.update(event);
-        EventDTO eventDTO = eventService.convertToDTO(updatedEvent);
+        event1.setTitle(event.getTitle());
+        event1.setDescription(event.getDescription());
+        event1.setLocation(event.getLocation());
+        eventService.update(event1);
+        EventDTO eventDTO = eventService.convertToDTO(event1);
         return ResponseEntity.ok().body(eventDTO);
     }
     //delete
