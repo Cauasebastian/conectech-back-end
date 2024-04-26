@@ -49,5 +49,11 @@ public class EventService {
             return eventDTO;
 
         }
+    //add post to event
+    public void addPostToEvent(String id, org.conectechgroup.conectech.model.Post post){
+        Event event = findById(id);
+        event.getPosts().add(post);
+        update(event);
+    }
 
 }

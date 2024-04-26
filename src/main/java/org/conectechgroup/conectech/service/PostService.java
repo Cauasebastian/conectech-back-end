@@ -1,5 +1,6 @@
 package org.conectechgroup.conectech.service;
 
+import org.conectechgroup.conectech.model.Interest;
 import org.conectechgroup.conectech.model.Post;
 import org.conectechgroup.conectech.model.DTO.PostDTO;
 import org.conectechgroup.conectech.repository.PostRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * PostService is a service class that handles business logic related to Post entities.
@@ -115,7 +117,19 @@ public class PostService {
         dto.setCommentsCount(post.getComments().size()); // Set the comments count
         dto.setAuthorId(post.getAuthor().getId());
         dto.setAuthorName(post.getAuthor().getName());
+        dto.setTags(post.getTags().stream().map(Interest::getName).collect(Collectors.toList()));
         return dto;
+    }
+    /** addTagsToPost
+     * Adds tags to a post.
+     * @param postId The id of the post.
+     * @param tags The tags to be added.
+     * @return The updated post object.
+     */
+    public Post addTagsToPost(String postId, List<Interest> tags) {
+        Post post = findById(postId);
+        post.getTags().addAll(tags);
+        return repo.save(post);
     }
 
 }

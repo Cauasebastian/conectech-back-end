@@ -2,6 +2,7 @@
 
 import com.mongodb.DuplicateKeyException;
 import org.conectechgroup.conectech.model.Event;
+import org.conectechgroup.conectech.model.Interest;
 import org.conectechgroup.conectech.model.Post;
 import org.conectechgroup.conectech.model.DTO.PostDTO;
 import org.conectechgroup.conectech.model.User;
@@ -133,17 +134,24 @@ public class UserService {
         postService.delete(Integer.parseInt(postId)); // Parse String to Integer
     }
 
-    //convert user to DTO
+    /**
+     * Converts a User object to UserDTO.
+     * @param user The User object.
+     * @return The UserDTO object.
+     */
     public UserDTO convertToDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
-        dto.setPosts(user.getPosts().size());
         dto.setBirthDate(user.getDateOfBirth());
         dto.setGender(user.getGender());
+        dto.setInterests(user.getInterests().stream().map(Interest::getName).collect(Collectors.toList()));
+        dto.setEventsParticipatedIn(user.getEventsParticipatedIn().size());
+        dto.setPosts(user.getPosts().stream().map(Post::getTitle).collect(Collectors.toList()));
         return dto;
     }
+
     /**
      * Adds an event to the list of events participated in by a user.
      * @param userId The id of the user.
@@ -155,5 +163,29 @@ public class UserService {
         event.getParticipants().add(user); // Add the user to the event's participants
         user.getEventsParticipatedIn().add(event); // Add the event to the user's participated events
         return repo.save(user); // Save the updated user object
+    }
+
+    /**
+     * Adds an interest to the list of interests of a user.
+     * @param userId The id of the user.
+     * @param interest The interest to be added.
+     * @return The updated user object.
+     */
+    public User addInterestToUser(String userId, Interest interest) {
+        User user = findById(userId);
+        user.getInterests().add(interest);
+        return repo.save(user);
+    }
+
+    /**
+     * Removes an interest from the list of interests of a user.
+     * @param userId The id of the user.
+     * @param interest The interest to be removed.
+     * @return The updated user object.
+     */
+    public User removeInterestFromUser(String userId, Interest interest) {
+        User user = findById(userId);
+        user.getInterests().remove(interest);
+        return repo.save(user);
     }
 }
