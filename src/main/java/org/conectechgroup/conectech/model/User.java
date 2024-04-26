@@ -1,5 +1,6 @@
 package org.conectechgroup.conectech.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -22,9 +23,11 @@ public class User implements java.io.Serializable{
     private String password;
     private String gender;
 
-    @DBRef(lazy = true)
-    @JsonManagedReference // Evita recursividade infinita
+    @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
+
+    @JsonManagedReference
+    private List<Event> eventsParticipatedIn = new ArrayList<>();
 
     public User() {
     }
@@ -94,9 +97,17 @@ public class User implements java.io.Serializable{
         this.posts = posts;
     }
 
+    public List<Event> getEventsParticipatedIn() {
+        return eventsParticipatedIn;
+    }
+    public void setEventsParticipatedIn(List<Event> eventsParticipatedIn) {
+        this.eventsParticipatedIn = eventsParticipatedIn;
+    }
+
     public String getGender() {
         return gender;
     }
+
 
     public void setGender(String gender) {
         this.gender = gender;
@@ -105,4 +116,6 @@ public class User implements java.io.Serializable{
     public User orElseThrow(Object userNotFound) {
         return null;
     }
+
+
 }

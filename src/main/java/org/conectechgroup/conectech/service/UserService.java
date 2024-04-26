@@ -1,10 +1,11 @@
  package org.conectechgroup.conectech.service;
 
 import com.mongodb.DuplicateKeyException;
+import org.conectechgroup.conectech.model.Event;
 import org.conectechgroup.conectech.model.Post;
-import org.conectechgroup.conectech.model.PostDTO;
+import org.conectechgroup.conectech.model.DTO.PostDTO;
 import org.conectechgroup.conectech.model.User;
-import org.conectechgroup.conectech.model.UserDTO;
+import org.conectechgroup.conectech.model.DTO.UserDTO;
 import org.conectechgroup.conectech.repository.PostRepository;
 import org.conectechgroup.conectech.repository.UserRepository;
 import org.conectechgroup.conectech.service.exception.ObjectNotFoundException;
@@ -142,5 +143,17 @@ public class UserService {
         dto.setBirthDate(user.getDateOfBirth());
         dto.setGender(user.getGender());
         return dto;
+    }
+    /**
+     * Adds an event to the list of events participated in by a user.
+     * @param userId The id of the user.
+     * @param event The event to be added.
+     * @return The updated user object.
+     */
+    public User addEventToUser(String userId, Event event) {
+        User user = findById(userId); // Retrieve the user by id
+        event.getParticipants().add(user); // Add the user to the event's participants
+        user.getEventsParticipatedIn().add(event); // Add the event to the user's participated events
+        return repo.save(user); // Save the updated user object
     }
 }
