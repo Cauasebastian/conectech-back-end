@@ -1,11 +1,13 @@
 package org.conectechgroup.conectech.controller;
 
 import org.conectechgroup.conectech.model.*;
+import org.conectechgroup.conectech.model.DTO.CommentDTO;
+import org.conectechgroup.conectech.model.DTO.PostDTO;
+import org.conectechgroup.conectech.model.DTO.UserDTO;
 import org.conectechgroup.conectech.service.CommentService;
 import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
