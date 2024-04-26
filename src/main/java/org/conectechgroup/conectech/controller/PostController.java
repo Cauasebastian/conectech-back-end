@@ -1,7 +1,7 @@
 package org.conectechgroup.conectech.controller;
 
 import org.conectechgroup.conectech.model.Post;
-import org.conectechgroup.conectech.model.DTO.PostDTO;
+import org.conectechgroup.conectech.model.PostDTO;
 import org.conectechgroup.conectech.model.User;
 import org.conectechgroup.conectech.model.Comment;
 import org.conectechgroup.conectech.service.CommentService;

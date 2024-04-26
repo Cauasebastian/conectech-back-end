@@ -1,4 +1,4 @@
-package org.conectechgroup.conectech.model.DTO;
+package org.conectechgroup.conectech.model;
 
 import java.time.LocalDateTime;
 
