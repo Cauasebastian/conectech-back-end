@@ -1,9 +1,7 @@
 package org.conectechgroup.conectech.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -28,6 +26,9 @@ public class User implements java.io.Serializable{
 
     @JsonManagedReference
     private List<Event> eventsParticipatedIn = new ArrayList<>();
+
+
+    private List<Interest> interests = new ArrayList<>();
 
     public User() {
     }
@@ -102,6 +103,14 @@ public class User implements java.io.Serializable{
     }
     public void setEventsParticipatedIn(List<Event> eventsParticipatedIn) {
         this.eventsParticipatedIn = eventsParticipatedIn;
+    }
+
+    public List<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(List<Interest> interests) {
+        this.interests = interests;
     }
 
     public String getGender() {

@@ -23,13 +23,17 @@ public class Post implements java.io.Serializable {
     private String description;
     private Date date;
 
+    private Event event;
+
     @DBRef(lazy = true)
     private List<Comment> comments = new ArrayList<>();
+
+    private List<Interest> tags = new ArrayList<>(); // Tags para facilitar a busca
 
     public Post() {
     }
 
-    public Post(String id,User author, String title, int likes, String description, Date date, List<Comment> comments) {
+    public Post(String id, User author, String title, int likes, String description, Date date, List<Comment> comments, List<Interest> tags) {
         this.id = id;
         this.author = author;
         this.title = title;
@@ -37,6 +41,7 @@ public class Post implements java.io.Serializable {
         this.description = description;
         this.date = date;
         this.comments = comments;
+        this.tags = tags;
     }
 
     //#region Getters and Setters
@@ -93,6 +98,21 @@ public class Post implements java.io.Serializable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Interest> getTags() {
+        return tags;
+    }
+    public void setTags(List<Interest> tags) {
+        this.tags = tags;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
     //#endregion
 }
