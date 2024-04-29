@@ -1,11 +1,11 @@
 package org.conectechgroup.conectech.controller;
 
 import org.conectechgroup.conectech.model.*;
-import org.conectechgroup.conectech.service.CommentService;
-import org.conectechgroup.conectech.service.PostService;
-import org.conectechgroup.conectech.service.UserService;
+import org.conectechgroup.conectech.model.DTO.CommentDTO;
+import org.conectechgroup.conectech.model.DTO.PostDTO;
+import org.conectechgroup.conectech.model.DTO.UserDTO;
+import org.conectechgroup.conectech.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,24 +29,13 @@ public class UserController {
     private PostService postService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private InterestService interestService;
 
-    /**
-     * Adds a post to a user.
-     *
-     * @param id   the id of the user
-     * @param post the post to be added
-     * @return a ResponseEntity with no content
-     */
-    @PostMapping("/{id}/posts")
-    public ResponseEntity<Void> addPostToUser(@PathVariable String id, @RequestBody Post post) {
-        User user = service.findById(id);
-        post.setAuthor(user);
-        post = postService.insert(post); // Save the post in the PostRepository
-        user.getPosts().add(post);
-        service.update(user);
-        service.addPostToUser(id, post); // Save the post in the UserRepository
-        return ResponseEntity.noContent().build();
-    }
+    @Autowired
+    private EventService eventService;
+
+    //#region Users
 
     /**
      * Retrieves all users in the DTO format.
@@ -107,6 +96,28 @@ public class UserController {
     public ResponseEntity<Void> update(@RequestBody User obj, @PathVariable String id) {
         obj.setId(id);
         service.update(obj);
+        return ResponseEntity.noContent().build();
+    }
+
+    //#endregion
+
+    //#region Posts
+
+    /**
+     * Adds a post to a user.
+     *
+     * @param id   the id of the user
+     * @param post the post to be added
+     * @return a ResponseEntity with no content
+     */
+    @PostMapping("/{id}/posts")
+    public ResponseEntity<Void> addPostToUser(@PathVariable String id, @RequestBody Post post) {
+        User user = service.findById(id);
+        post.setAuthor(user);
+        post = postService.insert(post); // Save the post in the PostRepository
+        user.getPosts().add(post);
+        service.update(user);
+        service.addPostToUser(id, post); // Save the post in the UserRepository
         return ResponseEntity.noContent().build();
     }
 
@@ -196,6 +207,18 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    //#endregion
+
+    //#region Comments
+
+    /**
+     * Add a comment to a post.
+     *
+     * @param id      the id of the user
+     * @param postId  the id of the post
+     * @param comment the comment to be added
+     * @return a ResponseEntity with no content
+     */
     @PostMapping("/{id}/posts/{postId}/comments")
     public ResponseEntity<Void> addCommentToPost(@PathVariable String id, @PathVariable String postId, @RequestBody Comment comment) {
         User user = service.findById(id);
@@ -219,6 +242,14 @@ public class UserController {
         // Retorna uma resposta de sucesso
         return ResponseEntity.noContent().build();
     }
+
+   /**
+     * Get all comments of a post.
+     *
+     * @param id     the id of the user
+     * @param postId the id of the post
+     * @return a ResponseEntity containing a list of comments
+     */
     @GetMapping("/{id}/posts/{postId}/comments")
     public ResponseEntity<List<CommentDTO>> getComments(@PathVariable String id, @PathVariable String postId) {
         User user = service.findById(id);
@@ -232,6 +263,14 @@ public class UserController {
         return ResponseEntity.ok().body(commentDTOs);
     }
 
+    /**
+     * Get a comment by id.
+     *
+     * @param id        the id of the user
+     * @param postId    the id of the post
+     * @param commentId the id of the comment
+     * @return a ResponseEntity containing the comment
+     */
     @GetMapping("/{id}/posts/{postId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> getComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
         User user = service.findById(id);
@@ -246,6 +285,16 @@ public class UserController {
         CommentDTO commentDTO = commentService.convertToDTO(comment);
         return ResponseEntity.ok().body(commentDTO);
     }
+
+    /**
+     * Update a comment.
+     *
+     * @param id        the id of the user
+     * @param postId    the id of the post
+     * @param commentId the id of the comment
+     * @param comment   the comment to be updated
+     * @return a ResponseEntity with no content
+     */
     @PutMapping("/{id}/posts/{postId}/comments/{commentId}")
     public ResponseEntity<Void> updateComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId, @RequestBody Comment comment) {
         User user = service.findById(id);
@@ -269,6 +318,14 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Delete a comment.
+     *
+     * @param id        the id of the user
+     * @param postId    the id of the post
+     * @param commentId the id of the comment
+     * @return a ResponseEntity with no content
+     */
     @DeleteMapping("/{id}/posts/{postId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
         User user = service.findById(id);
@@ -292,6 +349,15 @@ public class UserController {
 
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Like a comment.
+     *
+     * @param id        the id of the user
+     * @param postId    the id of the post
+     * @param commentId the id of the comment
+     * @return a ResponseEntity with no content
+     */
     @PostMapping("/{id}/posts/{postId}/comments/{commentId}/like")
     public ResponseEntity<Void> likeComment(@PathVariable String id, @PathVariable String postId, @PathVariable String commentId) {
         User user = service.findById(id);
@@ -305,6 +371,65 @@ public class UserController {
         }
         comment.setLikes(comment.getLikes() + 1);
         commentService.save(comment);
+        return ResponseEntity.noContent().build();
+    }
+
+    //#endregion
+
+    //#region Interests
+    /**
+     * Adicionar um interesse a um usuário
+     *
+     * @param id           the id of the user
+     * @param interestName the name of the interest
+     * @return a ResponseEntity with no content
+     */
+    @PostMapping("/{id}/interests/{interestName}")
+    public ResponseEntity<Void> addInterestToUser(@PathVariable String id, @PathVariable String interestName) {
+        User user = service.findById(id);
+        Interest interest = interestService.findByName(interestName);
+        if (interest == null) {
+            return ResponseEntity.notFound().build();
+        }
+        service.addInterestToUser(id, interest);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Remover um interesse de um usuário
+     *
+     * @param id           the id of the user
+     * @param interestName the name of the interest
+     * @return a ResponseEntity with no content
+     */
+    @DeleteMapping("/{id}/interests/{interestName}")
+    public ResponseEntity<Void> removeInterestFromUser(@PathVariable String id, @PathVariable String interestName) {
+        User user = service.findById(id);
+        Interest interest = interestService.findByName(interestName);
+        if (interest == null) {
+            return ResponseEntity.notFound().build();
+        }
+        service.removeInterestFromUser(id, interest);
+        return ResponseEntity.noContent().build();
+    }
+
+    //#endregion
+
+    /**
+     * Adicionar um evento a um usuário
+     *
+     * @param id     the id of the user
+     * @param eventId the id of the event
+     * @return a ResponseEntity with no content
+     */
+    @PostMapping("/{id}/events/{eventId}")
+    public ResponseEntity<Void> addEventToUser(@PathVariable String id, @PathVariable String eventId) {
+        User user = service.findById(id);
+        Event event = eventService.findById(eventId);
+        if (event == null) {
+            return ResponseEntity.notFound().build();
+        }
+        service.addEventToUser(id, event);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,25 +1,34 @@
 package org.conectechgroup.conectech.model.DTO;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class UserDTO {
     private String id;
     private String name;
     private String email;
-    private int Posts;
     private Date birthDate;
     private String gender;
+
+    private int eventsParticipatedIn;
+
+    private List<String> interests = new ArrayList<>();
+
+    private List<String> posts = new ArrayList<>();
 
     public UserDTO() {
     }
 
-    public UserDTO(String id, String name, String email, int posts, Date birthDate, String gender) {
+    public UserDTO(String id, String name, String email, Date birthDate, String gender, int eventsParticipatedIn, List<String> interests, List<String> posts) {
         this.id = id;
         this.name = name;
         this.email = email;
-        Posts = posts;
         this.birthDate = birthDate;
         this.gender = gender;
+        this.eventsParticipatedIn = eventsParticipatedIn;
+        this.interests = interests;
+        this.posts = posts;
     }
 
     public String getId() {
@@ -46,13 +55,7 @@ public class UserDTO {
         this.email = email;
     }
 
-    public int getPosts() {
-        return Posts;
-    }
 
-    public void setPosts(int posts) {
-        Posts = posts;
-    }
 
     public Date getBirthDate() {
         return birthDate;
@@ -68,5 +71,29 @@ public class UserDTO {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public int getEventsParticipatedIn() {
+        return eventsParticipatedIn;
+    }
+
+    public void setEventsParticipatedIn(int eventsParticipatedIn) {
+        this.eventsParticipatedIn = eventsParticipatedIn;
+    }
+
+    public List<String> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(List<String> interests) {
+        this.interests = interests;
+    }
+
+    public List<String> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<String> posts) {
+        this.posts = posts;
     }
 }

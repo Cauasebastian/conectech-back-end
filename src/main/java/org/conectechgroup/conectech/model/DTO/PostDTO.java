@@ -1,5 +1,6 @@
 package org.conectechgroup.conectech.model.DTO;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,10 +14,12 @@ public class PostDTO {
     private String authorId;
     private String authorName;
 
+    private List<String> tags = new ArrayList<>();
+
     public PostDTO() {
     }
 
-    public PostDTO(String id, String title, int likes, String description, Date date, int commentsCount, String authorId, String authorName) {
+    public PostDTO(String id, String title, int likes, String description, Date date, int commentsCount, String authorId, String authorName, List<String> tags) {
         this.id = id;
         this.title = title;
         this.likes = likes;
@@ -25,6 +28,7 @@ public class PostDTO {
         this.commentsCount = commentsCount;
         this.authorId = authorId;
         this.authorName = authorName;
+        this.tags = tags;
     }
 
     public int getCommentsCount() {
@@ -92,5 +96,13 @@ public class PostDTO {
     }
 
     public void setComments(List<org.conectechgroup.conectech.model.Comment> comments) {
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }
