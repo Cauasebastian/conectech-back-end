@@ -1,5 +1,6 @@
 package org.conectechgroup.conectech.service;
 
+import org.conectechgroup.conectech.DTO.InterestDTO;
 import org.conectechgroup.conectech.model.Interest;
 import org.conectechgroup.conectech.repository.InterestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class InterestService {
     public void delete(String id) {
         interestRepository.deleteById(id);
     }
-    public org.conectechgroup.conectech.model.DTO.InterestDTO convertToDTO(Interest interest) {
-        org.conectechgroup.conectech.model.DTO.InterestDTO interestDTO = new org.conectechgroup.conectech.model.DTO.InterestDTO();
+    public InterestDTO convertToDTO(Interest interest) {
+        InterestDTO interestDTO = new InterestDTO();
         interestDTO.setName(interest.getName());
         interestDTO.setPostsCount(interest.getPosts().size());
         return interestDTO;

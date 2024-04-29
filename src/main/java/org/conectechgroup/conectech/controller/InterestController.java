@@ -1,6 +1,6 @@
 package org.conectechgroup.conectech.controller;
 
-import org.conectechgroup.conectech.model.DTO.InterestDTO;
+import org.conectechgroup.conectech.DTO.InterestDTO;
 import org.conectechgroup.conectech.model.Interest;
 import org.conectechgroup.conectech.service.InterestService;
 import org.springframework.beans.factory.annotation.Autowired;

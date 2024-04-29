@@ -1,10 +1,9 @@
 package org.conectechgroup.conectech.service;
 
-import org.conectechgroup.conectech.model.DTO.EventDTO;
+import org.conectechgroup.conectech.DTO.EventDTO;
 import org.conectechgroup.conectech.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.conectechgroup.conectech.repository.EventRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

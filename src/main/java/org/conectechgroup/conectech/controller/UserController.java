@@ -1,9 +1,9 @@
 package org.conectechgroup.conectech.controller;
 
 import org.conectechgroup.conectech.model.*;
-import org.conectechgroup.conectech.model.DTO.CommentDTO;
-import org.conectechgroup.conectech.model.DTO.PostDTO;
-import org.conectechgroup.conectech.model.DTO.UserDTO;
+import org.conectechgroup.conectech.DTO.CommentDTO;
+import org.conectechgroup.conectech.DTO.PostDTO;
+import org.conectechgroup.conectech.DTO.UserDTO;
 import org.conectechgroup.conectech.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

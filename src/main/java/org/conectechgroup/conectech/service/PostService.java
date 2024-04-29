@@ -2,7 +2,7 @@ package org.conectechgroup.conectech.service;
 
 import org.conectechgroup.conectech.model.Interest;
 import org.conectechgroup.conectech.model.Post;
-import org.conectechgroup.conectech.model.DTO.PostDTO;
+import org.conectechgroup.conectech.DTO.PostDTO;
 import org.conectechgroup.conectech.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

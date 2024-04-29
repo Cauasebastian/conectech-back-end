@@ -1,7 +1,7 @@
 package org.conectechgroup.conectech.service;
 
 import org.conectechgroup.conectech.model.Comment;
-import org.conectechgroup.conectech.model.DTO.CommentDTO;
+import org.conectechgroup.conectech.DTO.CommentDTO;
 import org.conectechgroup.conectech.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

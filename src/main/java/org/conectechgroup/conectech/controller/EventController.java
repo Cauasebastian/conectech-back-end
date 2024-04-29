@@ -1,7 +1,7 @@
 package org.conectechgroup.conectech.controller;
 
 import org.conectechgroup.conectech.model.User;
-import org.conectechgroup.conectech.model.DTO.EventDTO;
+import org.conectechgroup.conectech.DTO.EventDTO;
 import org.conectechgroup.conectech.model.Event;
 import org.conectechgroup.conectech.service.EventService;
 import org.conectechgroup.conectech.service.UserService;
