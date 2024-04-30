@@ -3,7 +3,7 @@ package org.conectechgroup.conectech.controller;
 import org.conectechgroup.conectech.model.*;
 import org.conectechgroup.conectech.DTO.PostDTO;
 import org.conectechgroup.conectech.service.*;
-import org.conectechgroup.conectech.service.util.URL;
+import org.conectechgroup.conectech.util.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

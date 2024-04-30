@@ -1,6 +1,7 @@
 package org.conectechgroup.conectech.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,11 +24,16 @@ public class Post implements java.io.Serializable {
     private String description;
     private Date date;
 
+    @DBRef(lazy = true)
+    private Forum forum;
+
+    @DBRef(lazy = true)
     private Event event;
 
     @DBRef(lazy = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @DBRef(lazy = true)
     private List<Interest> tags = new ArrayList<>(); // Tags para facilitar a busca
 
     public Post() {
@@ -113,6 +119,13 @@ public class Post implements java.io.Serializable {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public Forum getForum() {
+        return forum;
+    }
+    public void setForum(Forum forum) {
+        this.forum = forum;
     }
     //#endregion
 }

@@ -1,8 +1,8 @@
 package org.conectechgroup.conectech.controller.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.conectechgroup.conectech.service.exception.ObjectNotFoundException;
-import org.conectechgroup.conectech.service.exception.UserAlreadyExistsException;
+import org.conectechgroup.conectech.exception.ObjectNotFoundException;
+import org.conectechgroup.conectech.exception.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -29,11 +29,12 @@ public class UserController {
     private PostService postService;
     @Autowired
     private CommentService commentService;
-    @Autowired
-    private InterestService interestService;
 
     @Autowired
     private EventService eventService;
+    @Autowired
+    private InterestService interestService;
+
 
     //#region Users
 

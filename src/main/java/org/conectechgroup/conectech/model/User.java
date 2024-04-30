@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "users")
 public class User implements java.io.Serializable{
@@ -27,12 +28,15 @@ public class User implements java.io.Serializable{
     @JsonManagedReference
     private List<Event> eventsParticipatedIn = new ArrayList<>();
 
+    @JsonManagedReference
+    private List<Forum> forums = new ArrayList<>();
 
     private List<Interest> interests = new ArrayList<>();
 
     public User() {
     }
-    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password,String gender) {
+
+    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password, String gender, List<Post> posts, List<Event> eventsParticipatedIn, List<Forum> forums, List<Interest> interests) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -40,6 +44,10 @@ public class User implements java.io.Serializable{
         Cpfcnpj = cpfcnpj;
         this.password = password;
         this.gender = gender;
+        this.posts = posts;
+        this.eventsParticipatedIn = eventsParticipatedIn;
+        this.forums = forums;
+        this.interests = interests;
     }
 
     public String getId() {
@@ -126,5 +134,25 @@ public class User implements java.io.Serializable{
         return null;
     }
 
+    public List<Forum> getForums() {
+        return forums;
+    }
+    public void setForums(List<Forum> forums) {
+        this.forums = forums;
+    }
+
+    // Na classe User
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

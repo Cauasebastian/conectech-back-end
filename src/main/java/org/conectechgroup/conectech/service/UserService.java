@@ -9,8 +9,8 @@ import org.conectechgroup.conectech.model.User;
 import org.conectechgroup.conectech.DTO.UserDTO;
 import org.conectechgroup.conectech.repository.PostRepository;
 import org.conectechgroup.conectech.repository.UserRepository;
-import org.conectechgroup.conectech.service.exception.ObjectNotFoundException;
-import org.conectechgroup.conectech.service.exception.UserAlreadyExistsException;
+import org.conectechgroup.conectech.exception.ObjectNotFoundException;
+import org.conectechgroup.conectech.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
