@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +31,8 @@ public class UserService {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Fetches all users on the DTO format.
@@ -77,6 +80,22 @@ public class UserService {
     }
 
     /**
+     * Updates a follower of a user.
+     * @param user The user object with updated information.
+     * @return The updated user object.
+     */
+    public User updateFollower(User user) {
+        Optional<User> optionalUser = userRepository.findById(user.getId());
+        if (optionalUser.isPresent()) {
+            User dbUser = optionalUser.get();
+            dbUser.setFollowing(user.getFollowing());
+            dbUser.setFollowers(user.getFollowers());
+            return userRepository.save(dbUser);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+    /**
      * Updates a user.
      * @param obj The user object with updated information.
      * @return The updated user object.
@@ -85,6 +104,25 @@ public class UserService {
         User newObj = findById(obj.getId());
         updateData(newObj, obj);
         return repo.save(newObj);
+    }
+    /**
+     * Updates a user profile.
+     * @param obj The user object with updated information.
+     * @return The updated user object.
+     */
+    public User updateProfile(User obj) {
+        Optional<User> optionalUser = userRepository.findById(obj.getId());
+        if (optionalUser.isPresent()) {
+            User dbUser = optionalUser.get();
+            dbUser.setName(obj.getName());
+            dbUser.setEmail(obj.getEmail());
+            dbUser.setDateOfBirth(obj.getDateOfBirth());
+            dbUser.setGender(obj.getGender());
+            dbUser.setPassword(obj.getPassword());
+            return userRepository.save(dbUser);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
     /**
@@ -147,7 +185,9 @@ public class UserService {
         dto.setBirthDate(user.getDateOfBirth());
         dto.setGender(user.getGender());
         dto.setInterests(user.getInterests().stream().map(Interest::getName).collect(Collectors.toList()));
-        dto.setEventsParticipatedIn(user.getEventsParticipatedIn().size());
+        dto.setFollowers(user.getFollowers().stream().map(User::getName).collect(Collectors.toList()));
+        dto.setFollowing(user.getFollowing().stream().map(User::getName).collect(Collectors.toList()));
+        dto.setEventsParticipatedIn(user.getEventsParticipatedIn().stream().map(Event::getTitle).collect(Collectors.toList()));
         dto.setPosts(user.getPosts().stream().map(Post::getTitle).collect(Collectors.toList()));
         return dto;
     }

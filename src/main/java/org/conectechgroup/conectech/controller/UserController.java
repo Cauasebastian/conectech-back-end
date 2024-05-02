@@ -96,7 +96,7 @@ public class UserController {
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
     public ResponseEntity<Void> update(@RequestBody User obj, @PathVariable String id) {
         obj.setId(id);
-        service.update(obj);
+        service.updateProfile(obj);
         return ResponseEntity.noContent().build();
     }
 
@@ -431,6 +431,37 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         service.addEventToUser(id, event);
+        return ResponseEntity.noContent().build();
+    }
+    //follow a user
+    @PostMapping("/{id}/follow/{userId}")
+    public ResponseEntity<Void> followUser(@PathVariable String id, @PathVariable String userId) {
+        User user = service.findById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        User userToFollow = service.findById(userId);
+        if (userToFollow == null || userToFollow.equals(user) || user.getFollowing().contains(userToFollow)) {
+            return ResponseEntity.badRequest().build();
+        }
+        user.getFollowing().add(userToFollow);
+        userToFollow.getFollowers().add(user);
+        service.updateFollower(user);
+        service.updateFollower(userToFollow);
+        return ResponseEntity.noContent().build();
+    }
+    //unfollow a user
+    @DeleteMapping("/{id}/unfollow/{userId}")
+    public ResponseEntity<Void> unfollowUser(@PathVariable String id, @PathVariable String userId) {
+        User user = service.findById(id);
+        User userToUnfollow = service.findById(userId);
+        if (userToUnfollow == null) {
+            return ResponseEntity.notFound().build();
+        }
+        user.getFollowing().remove(userToUnfollow);
+        userToUnfollow.getFollowers().remove(user);
+        service.update(user);
+        service.update(userToUnfollow);
         return ResponseEntity.noContent().build();
     }
 }

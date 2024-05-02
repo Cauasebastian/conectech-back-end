@@ -11,7 +11,10 @@ public class UserDTO {
     private Date birthDate;
     private String gender;
 
-    private int eventsParticipatedIn;
+    private List<String> Followers = new ArrayList<>();
+    private List<String> following = new ArrayList<>();
+
+    private List<String> eventsParticipatedIn = new ArrayList<>();
 
     private List<String> interests = new ArrayList<>();
 
@@ -20,12 +23,14 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(String id, String name, String email, Date birthDate, String gender, int eventsParticipatedIn, List<String> interests, List<String> posts) {
+    public UserDTO(String id, String name, String email, Date birthDate, String gender, List<String> followers, List<String> following, List<String> eventsParticipatedIn, List<String> interests, List<String> posts) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.birthDate = birthDate;
         this.gender = gender;
+        Followers = followers;
+        this.following = following;
         this.eventsParticipatedIn = eventsParticipatedIn;
         this.interests = interests;
         this.posts = posts;
@@ -72,15 +77,6 @@ public class UserDTO {
     public void setGender(String gender) {
         this.gender = gender;
     }
-
-    public int getEventsParticipatedIn() {
-        return eventsParticipatedIn;
-    }
-
-    public void setEventsParticipatedIn(int eventsParticipatedIn) {
-        this.eventsParticipatedIn = eventsParticipatedIn;
-    }
-
     public List<String> getInterests() {
         return interests;
     }
@@ -95,5 +91,29 @@ public class UserDTO {
 
     public void setPosts(List<String> posts) {
         this.posts = posts;
+    }
+
+    public List<String> getFollowers() {
+        return Followers;
+    }
+
+    public void setFollowers(List<String> followers) {
+        Followers = followers;
+    }
+
+    public List<String> getEventsParticipatedIn() {
+        return eventsParticipatedIn;
+    }
+
+    public void setEventsParticipatedIn(List<String> eventsParticipatedIn) {
+        this.eventsParticipatedIn = eventsParticipatedIn;
+    }
+
+    public List<String> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<String> following) {
+        this.following = following;
     }
 }

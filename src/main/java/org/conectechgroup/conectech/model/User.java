@@ -3,11 +3,13 @@ package org.conectechgroup.conectech.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
 
 @Document(collection = "users")
 public class User implements java.io.Serializable{
@@ -22,16 +24,23 @@ public class User implements java.io.Serializable{
     private String password;
     private String gender;
 
+    @DBRef
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
+    @DBRef
     @JsonManagedReference
     private List<Event> eventsParticipatedIn = new ArrayList<>();
 
+    @DBRef
     @JsonManagedReference
     private List<Forum> forums = new ArrayList<>();
-
+    @DBRef
     private List<Interest> interests = new ArrayList<>();
+    @DBRef
+    private List<User> followers = new ArrayList<>();
+    @DBRef
+    private List<User> following = new ArrayList<>();
 
     public User() {
     }
@@ -140,8 +149,6 @@ public class User implements java.io.Serializable{
     public void setForums(List<Forum> forums) {
         this.forums = forums;
     }
-
-    // Na classe User
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -153,6 +160,22 @@ public class User implements java.io.Serializable{
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public List<User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
+    }
+
+    public List<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<User> following) {
+        this.following = following;
     }
 
 }
