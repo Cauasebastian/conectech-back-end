@@ -121,6 +121,13 @@ public class EventController {
         }
         return ResponseEntity.ok().body(event.getParticipants());
     }
+    // find event by tittle
+    @GetMapping(value = "/title/{title}")
+    public ResponseEntity<EventDTO> findByTitle(@PathVariable String title){
+        Event event = eventService.findByTitle(title);
+        EventDTO eventDTO = eventService.convertToDTO(event);
+        return ResponseEntity.ok().body(eventDTO);
+    }
 
 
 

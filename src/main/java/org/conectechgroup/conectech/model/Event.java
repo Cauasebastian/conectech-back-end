@@ -30,6 +30,9 @@ public class Event implements java.io.Serializable {
     @DBRef(lazy = true)
     private List<Post> posts = new ArrayList<>(); // No need for @JsonManagedReference here
 
+    @DBRef(lazy = true)
+    private Forum forum;
+
     public Event() {
     }
 
@@ -106,5 +109,13 @@ public class Event implements java.io.Serializable {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public Forum getForum() {
+        return forum;
+    }
+
+    public void setForum(Forum forum) {
+        this.forum = forum;
     }
 }

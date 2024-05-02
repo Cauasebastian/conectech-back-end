@@ -2,6 +2,7 @@ package org.conectechgroup.conectech.service;
 
 import org.conectechgroup.conectech.DTO.EventDTO;
 import org.conectechgroup.conectech.model.Event;
+import org.conectechgroup.conectech.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.conectechgroup.conectech.repository.EventRepository;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,12 @@ public class EventService {
     //convert to DTO
     public EventDTO convertToDTO(Event event){
        EventDTO eventDTO = new EventDTO();
+        User author = event.getAuthor();
+        if (author != null) {
+            eventDTO.setAuthorName(author.getName());
+        } else {
+            eventDTO.setAuthorName("Unknown");
+        }
          eventDTO.setId(event.getId());
             eventDTO.setTitle(event.getTitle());
             eventDTO.setDescription(event.getDescription());
@@ -53,6 +60,10 @@ public class EventService {
         Event event = findById(id);
         event.getPosts().add(post);
         update(event);
+    }
+    //find by title
+    public Event findByTitle(String title){
+        return eventRepository.findByTitle(title);
     }
 
 }
