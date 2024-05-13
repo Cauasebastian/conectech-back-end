@@ -431,9 +431,32 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         service.addEventToUser(id, event);
+        //update the user
+        service.update(user);
+        eventService.update(event);
         return ResponseEntity.noContent().build();
     }
-    //follow a user
+
+    @DeleteMapping("/{id}/events/{eventId}")
+    public ResponseEntity<Void> removeEventFromUser(@PathVariable String id, @PathVariable String eventId) {
+        User user = service.findById(id);
+        Event event = eventService.findById(eventId);
+        if (event == null) {
+            return ResponseEntity.notFound().build();
+        }
+        service.removeEventFromUser(id, event);
+        service.update(user);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Adicionar um seguidor a um usuário
+     *
+     * @param id     the id of the user
+     * @param  userId the id of the event
+     * @return a ResponseEntity with no content
+     */
     @PostMapping("/{id}/follow/{userId}")
     public ResponseEntity<Void> followUser(@PathVariable String id, @PathVariable String userId) {
         User user = service.findById(id);
@@ -450,7 +473,14 @@ public class UserController {
         service.updateFollower(userToFollow);
         return ResponseEntity.noContent().build();
     }
-    //unfollow a user
+
+    /**
+     * Remover um seguidor de um usuário
+     *
+     * @param id     the id of the user
+     * @param  userId the id of the event
+     * @return a ResponseEntity with no content
+     */
     @DeleteMapping("/{id}/unfollow/{userId}")
     public ResponseEntity<Void> unfollowUser(@PathVariable String id, @PathVariable String userId) {
         User user = service.findById(id);

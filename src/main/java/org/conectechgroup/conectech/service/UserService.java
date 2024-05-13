@@ -228,4 +228,22 @@ public class UserService {
         user.getInterests().remove(interest);
         return repo.save(user);
     }
+    /** remove event from user
+     * @param userId The id of the user.
+     * @param event The event to be removed.
+     * @return The updated user object.
+     */
+    public User removeEventFromUser(String userId, Event event) {
+        User user = findById(userId);
+        user.getEventsParticipatedIn().remove(event);
+        return repo.save(user);
+    }
+    /**
+     * find user by email and password
+     * @param email The email of the user.
+     * @param password The password of the user.
+     * @return The user object.
+     */
+    public User findByEmailAndPassword(String email, String password) {
+        return repo.findByEmailAndPassword(email, password);}
 }
