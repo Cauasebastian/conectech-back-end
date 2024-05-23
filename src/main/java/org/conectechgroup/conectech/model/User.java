@@ -23,6 +23,8 @@ public class User implements java.io.Serializable{
     private String Cpfcnpj;
     private String password;
     private String gender;
+    private byte[] profileImage;
+    private String imageContentType;
 
     @DBRef
     @JsonManagedReference
@@ -45,18 +47,16 @@ public class User implements java.io.Serializable{
     public User() {
     }
 
-    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password, String gender, List<Post> posts, List<Event> eventsParticipatedIn, List<Forum> forums, List<Interest> interests) {
+    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password, String gender, byte[] profileImage, String imageContentType) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
-        Cpfcnpj = cpfcnpj;
+        this.Cpfcnpj = cpfcnpj;
         this.password = password;
         this.gender = gender;
-        this.posts = posts;
-        this.eventsParticipatedIn = eventsParticipatedIn;
-        this.forums = forums;
-        this.interests = interests;
+        this.profileImage = profileImage;
+        this.imageContentType = imageContentType;
     }
 
     public String getId() {
@@ -143,6 +143,38 @@ public class User implements java.io.Serializable{
         return null;
     }
 
+    public List<User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
+    }
+
+    public List<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<User> following) {
+        this.following = following;
+    }
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
+    }
+
     public List<Forum> getForums() {
         return forums;
     }
@@ -160,22 +192,6 @@ public class User implements java.io.Serializable{
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public List<User> getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(List<User> followers) {
-        this.followers = followers;
-    }
-
-    public List<User> getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(List<User> following) {
-        this.following = following;
     }
 
 }

@@ -13,7 +13,9 @@ import org.conectechgroup.conectech.exception.ObjectNotFoundException;
 import org.conectechgroup.conectech.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -246,4 +248,26 @@ public class UserService {
      */
     public User findByEmailAndPassword(String email, String password) {
         return repo.findByEmailAndPassword(email, password);}
+
+    public User saveUserWithImage(String id, MultipartFile imageFile) throws IOException {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setProfileImage(imageFile.getBytes());
+            user.setImageContentType(imageFile.getContentType());
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+
+    public byte[] getUserImage(String id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return user.getProfileImage();
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
 }

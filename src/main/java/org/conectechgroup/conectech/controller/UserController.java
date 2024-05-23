@@ -6,10 +6,15 @@ import org.conectechgroup.conectech.DTO.PostDTO;
 import org.conectechgroup.conectech.DTO.UserDTO;
 import org.conectechgroup.conectech.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -98,6 +103,24 @@ public class UserController {
         obj.setId(id);
         service.updateProfile(obj);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/uploadImage")
+    public ResponseEntity<String> uploadImage(@PathVariable String id, @RequestParam("image") MultipartFile imageFile) {
+        try {
+            service.saveUserWithImage(id, imageFile);
+            return ResponseEntity.status(HttpStatus.OK).body("Image uploaded successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
+        }
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getUserImage(@PathVariable String id) {
+        byte[] image = service.getUserImage(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
 
     //#endregion
