@@ -3,30 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Usuário</title>
+    <title>User Image Upload</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h2>Adicionar Usuário</h2>
-<form id="addUserForm">
-    <label for="name">Nome:</label><br>
-    <input type="text" id="name" name="name" required><br>
-
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br>
-
-    <label for="dateOfBirth">Data de Nascimento:</label><br>
-    <input type="date" id="dateOfBirth" name="dateOfBirth" required><br>
-
-    <label for="password">Senha:</label><br>
-    <input type="password" id="password" name="password" required><br>
-
-    <label for="cpfcnpj">CPF/CNPJ:</label><br>
-    <input type="text" id="cpfcnpj" name="cpfcnpj" required><br>
-
-    <button type="submit">Adicionar Usuário</button>
-</form>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<div class="container">
+    <h1>User Image Upload</h1>
+    <form id="uploadForm">
+        <input type="text" id="userId" placeholder="User ID" required>
+        <input type="file" id="imageFile" accept="image/*" required>
+        <button type="submit">Upload Image</button>
+    </form>
+    <div id="message"></div>
+    <div id="imageContainer"></div>
+</div>
 <script src="script.js"></script>
 </body>
 </html>

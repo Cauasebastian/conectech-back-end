@@ -1,32 +1,48 @@
-$(document).ready(function() {
-    $('#addUserForm').submit(function(event) {
-        event.preventDefault(); // Impede o envio padrão do formulário
+document.getElementById('uploadForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-        // Obter dados do formulário
-        const userData = {
-            name: $('#name').val(),
-            email: $('#email').val(),
-            dateOfBirth: $('#dateOfBirth').val(),
-            password: $('#password').val(),
-            cpfcnpj: $('#cpfcnpj').val()
-        };
+    const userId = document.getElementById('userId').value;
+    const imageFile = document.getElementById('imageFile').files[0];
 
-        // Enviar solicitação POST usando AJAX
-        $.ajax({
-            url: "http://localhost:8080/users",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(userData),
-            success: function(response) {
-                console.log("Usuário adicionado com sucesso:", response);
-                // Limpar o formulário após adicionar o usuário
-                $('#addUserForm')[0].reset();
-                // Atualizar a interface do usuário conforme necessário
-            },
-            error: function(xhr, status, error) {
-                console.error("Erro ao adicionar usuário:", status, error);
-                // Exibir uma mensagem de erro na interface do usuário, se necessário
-            }
+    if (!userId || !imageFile) {
+        document.getElementById('message').textContent = "Please provide a user ID and select an image file.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    fetch(`http://localhost:8080/users/${userId}/uploadImage`, {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('message').textContent = data;
+            loadImage(userId);
+        })
+        .catch(error => {
+            document.getElementById('message').textContent = "Error uploading image.";
+            console.error('Error:', error);
         });
-    });
 });
+
+function loadImage(userId) {
+    fetch(`http://localhost:8080/users/${userId}/image`)
+        .then(response => response.blob())
+        .then(blob => {
+            const imgElement = document.createElement('img');
+            imgElement.src = URL.createObjectURL(blob);
+            imgElement.alt = "User Image";
+            imgElement.style.maxWidth = "100%";
+            imgElement.style.height = "auto";
+
+            const imageContainer = document.getElementById('imageContainer');
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(imgElement);
+        })
+        .catch(error => {
+            document.getElementById('message').textContent = "Error loading image.";
+            console.error('Error:', error);
+        });
+}
