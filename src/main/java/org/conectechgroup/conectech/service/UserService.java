@@ -1,12 +1,10 @@
  package org.conectechgroup.conectech.service;
 
 import com.mongodb.DuplicateKeyException;
-import org.conectechgroup.conectech.model.Event;
-import org.conectechgroup.conectech.model.Interest;
-import org.conectechgroup.conectech.model.Post;
+import org.conectechgroup.conectech.model.*;
 import org.conectechgroup.conectech.DTO.PostDTO;
-import org.conectechgroup.conectech.model.User;
 import org.conectechgroup.conectech.DTO.UserDTO;
+import org.conectechgroup.conectech.repository.ImageRepository;
 import org.conectechgroup.conectech.repository.PostRepository;
 import org.conectechgroup.conectech.repository.UserRepository;
 import org.conectechgroup.conectech.exception.ObjectNotFoundException;
@@ -16,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +36,8 @@ public class UserService {
     private PostService postService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ImageRepository imageRepository;
 
     /**
      * Fetches all users on the DTO format.
@@ -57,6 +60,9 @@ public class UserService {
         return repo.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
+    public User findByName(String name) {
+        return repo.findByName(name);
+    }
 
     /**
      * Inserts a new user.
@@ -77,9 +83,21 @@ public class UserService {
      * @param id The id of the user to be deleted.
      */
     public void delete(String id) {
-        findById(id);
+        User user = findById(id);
+        List<User> usersReferencingImage = userRepository.findByProfileImage(user.getProfileImage());
+
+        // Verificar se nenhum outro usuário está referenciando a mesma imagem
+        if (usersReferencingImage.size() <= 1) {
+            // Se nenhum outro usuário referenciar a mesma imagem imagem é deletada do banco de dados
+            if (user.getProfileImage() != null) {
+                imageRepository.delete(user.getProfileImage());
+            }
+        }
+
+        // Excluir o usuário do banco de dados
         repo.deleteById(id);
     }
+
 
     /**
      * Updates a follower of a user.
@@ -121,10 +139,18 @@ public class UserService {
             dbUser.setDateOfBirth(obj.getDateOfBirth());
             dbUser.setGender(obj.getGender());
             dbUser.setPassword(obj.getPassword());
+            dbUser.setBio(obj.getBio());
+            dbUser.setUsername(obj.getUsername());
             return userRepository.save(dbUser);
         } else {
             throw new RuntimeException("User not found");
         }
+    }
+    //add forum to user
+    public User addForumToUser(String userId, Forum forum) {
+        User user = findById(userId);
+        user.getForums().add(forum);
+        return repo.save(user);
     }
 
     /**
@@ -249,23 +275,70 @@ public class UserService {
     public User findByEmailAndPassword(String email, String password) {
         return repo.findByEmailAndPassword(email, password);}
 
-    public User saveUserWithImage(String id, MultipartFile imageFile) throws IOException {
+    public User saveUserWithImage(String id, MultipartFile imageFile) throws IOException, NoSuchAlgorithmException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setProfileImage(imageFile.getBytes());
-            user.setImageContentType(imageFile.getContentType());
-            return userRepository.save(user);
+
+            if (imageFile.isEmpty()) {
+                throw new IllegalArgumentException("The image file is empty");
+            }
+
+            byte[] imageData = imageFile.getBytes();
+            String contentType = imageFile.getContentType();
+
+            if (contentType == null || !contentType.startsWith("image/")) {
+                throw new IllegalArgumentException("The file is not a valid image");
+            }
+
+            String imageHash = calculateHash(imageData);
+            Optional<Image> existingImage = imageRepository.findByHash(imageHash);
+
+            Image image;
+            if (existingImage.isPresent()) {
+                image = existingImage.get();
+            } else {
+                image = new Image(imageData, contentType, imageHash);
+                imageRepository.save(image);
+            }
+
+            // Check if the user already has a profile image
+            Image oldImage = user.getProfileImage();
+            if (oldImage != null && !oldImage.equals(image)) {
+                // Update user's profile image
+                user.setProfileImage(image);
+                userRepository.save(user);
+
+                // Check if the old image is referenced by any other user
+                List<User> usersReferencingImage = userRepository.findByProfileImage(oldImage);
+                if (usersReferencingImage.size() <= 1) {
+                    // If no other user references the old image, delete it
+                    imageRepository.delete(oldImage);
+                }
+            } else {
+                // Update user's profile image without deleting any image
+                user.setProfileImage(image);
+                userRepository.save(user);
+            }
+
+            return user;
         } else {
             throw new RuntimeException("User not found");
         }
     }
-
+    //cauculate hash of image and return it in base64 format
+    private String calculateHash(byte[] data) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(data);
+        return Base64.getEncoder().encodeToString(hashBytes);
+    }
+    //get user image
     public byte[] getUserImage(String id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return user.getProfileImage();
+            Image image = user.getProfileImage();
+            return image != null ? image.getData() : null;
         } else {
             throw new RuntimeException("User not found");
         }

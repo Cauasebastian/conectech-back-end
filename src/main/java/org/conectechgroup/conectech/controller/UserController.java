@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,6 +66,13 @@ public class UserController {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
+    //getUserByName
+    @RequestMapping(value= "/name/{name}", method=RequestMethod.GET)
+    public ResponseEntity<UserDTO> findByName(@PathVariable String name) {
+        User obj = service.findByName(name);
+        UserDTO userDTO = service.convertToDTO(obj);
+        return ResponseEntity.ok().body(userDTO);
+    }
 
     /**
      * Inserts a new user.
@@ -73,10 +81,10 @@ public class UserController {
      * @return a ResponseEntity with no content
      */
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody User obj) {
+    public ResponseEntity<User> insert(@RequestBody User obj) {
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(obj);
     }
 
     /**
@@ -86,7 +94,7 @@ public class UserController {
      * @return a ResponseEntity with no content
      */
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+        public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -110,7 +118,7 @@ public class UserController {
         try {
             service.saveUserWithImage(id, imageFile);
             return ResponseEntity.status(HttpStatus.OK).body("Image uploaded successfully");
-        } catch (IOException e) {
+        } catch (IOException | NoSuchAlgorithmException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
         }
     }
@@ -118,9 +126,13 @@ public class UserController {
     @GetMapping("/{id}/image")
     public ResponseEntity<byte[]> getUserImage(@PathVariable String id) {
         byte[] image = service.getUserImage(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+        if (image != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(image, headers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     //#endregion

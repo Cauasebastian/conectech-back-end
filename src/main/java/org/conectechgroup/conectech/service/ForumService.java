@@ -52,5 +52,7 @@ public class ForumService {
     }
 
 
-
+    public Forum insert(Forum forum) {
+        return forumRepository.save(forum);
+    }
 }

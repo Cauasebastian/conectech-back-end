@@ -1,5 +1,6 @@
 package org.conectechgroup.conectech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,36 +19,44 @@ public class User implements java.io.Serializable{
     @Id
     private String id;
     private String name;
+    private String username;
     private String email;
     private Date dateOfBirth;
     private String Cpfcnpj;
     private String password;
     private String gender;
-    private byte[] profileImage;
-    private String imageContentType;
+    private String bio;
 
     @DBRef
-    @JsonManagedReference
+    private Image profileImage;
+
+    @DBRef
+    @JsonIgnoreProperties("user")
     private List<Post> posts = new ArrayList<>();
 
     @DBRef
-    @JsonManagedReference
+    @JsonIgnoreProperties("participants")
     private List<Event> eventsParticipatedIn = new ArrayList<>();
 
     @DBRef
-    @JsonManagedReference
+    @JsonIgnoreProperties("users")
     private List<Forum> forums = new ArrayList<>();
+
     @DBRef
     private List<Interest> interests = new ArrayList<>();
+
     @DBRef
+    @JsonIgnoreProperties("following")
     private List<User> followers = new ArrayList<>();
+
     @DBRef
+    @JsonIgnoreProperties("followers")
     private List<User> following = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password, String gender, byte[] profileImage, String imageContentType) {
+    public User(String id, String name, String email, Date dateOfBirth, String cpfcnpj, String password, String gender, String bio,String username) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -55,8 +64,8 @@ public class User implements java.io.Serializable{
         this.Cpfcnpj = cpfcnpj;
         this.password = password;
         this.gender = gender;
-        this.profileImage = profileImage;
-        this.imageContentType = imageContentType;
+        this.bio = bio;
+        this.username = username;
     }
 
     public String getId() {
@@ -81,6 +90,22 @@ public class User implements java.io.Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public Date getDateOfBirth() {
@@ -159,20 +184,12 @@ public class User implements java.io.Serializable{
         this.following = following;
     }
 
-    public byte[] getProfileImage() {
+    public Image getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(byte[] profileImage) {
+    public void setProfileImage(Image profileImage) {
         this.profileImage = profileImage;
-    }
-
-    public String getImageContentType() {
-        return imageContentType;
-    }
-
-    public void setImageContentType(String imageContentType) {
-        this.imageContentType = imageContentType;
     }
 
     public List<Forum> getForums() {

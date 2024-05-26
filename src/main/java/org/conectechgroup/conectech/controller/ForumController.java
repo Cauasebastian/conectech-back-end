@@ -10,6 +10,7 @@ import org.conectechgroup.conectech.service.ForumService;
 import org.conectechgroup.conectech.service.PostService;
 import org.conectechgroup.conectech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,9 +69,17 @@ public class ForumController {
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
+
         forum.setAuthor(user);
         forum.setDate(new Date());
-        Forum insertedForum = forumService.insert(forum, userId);
+
+        Forum insertedForum = forumService.insert(forum);
+        if (insertedForum == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        userService.addForumToUser(userId, insertedForum);
+
         return ResponseEntity.noContent().build();
     }
 
