@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/interest")
+@RequestMapping("/interests")
 public class InterestController {
 
     @Autowired
@@ -29,12 +29,16 @@ public class InterestController {
         List<InterestDTO> interestDTOs = interests.stream().map(interestService::convertToDTO).collect(Collectors.toList());
         return ResponseEntity.ok().body(interestDTOs);
     }
-    @GetMapping(value = "/name")
+    @GetMapping("/{name}")
     public ResponseEntity<InterestDTO> findByName(@PathVariable String name){
         Interest interest = interestService.findByName(name);
+        if (interest == null) {
+            return ResponseEntity.notFound().build();
+        }
         InterestDTO interestDTO = interestService.convertToDTO(interest);
         return ResponseEntity.ok().body(interestDTO);
     }
+
     @PostMapping
     public ResponseEntity<InterestDTO> insert(@RequestBody Interest interest){
         Interest newInterest = interestService.insert(interest);
