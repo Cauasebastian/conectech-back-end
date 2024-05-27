@@ -134,18 +134,35 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(obj.getId());
         if (optionalUser.isPresent()) {
             User dbUser = optionalUser.get();
-            dbUser.setName(obj.getName());
-            dbUser.setEmail(obj.getEmail());
-            dbUser.setDateOfBirth(obj.getDateOfBirth());
-            dbUser.setGender(obj.getGender());
-            dbUser.setPassword(obj.getPassword());
-            dbUser.setBio(obj.getBio());
-            dbUser.setUsername(obj.getUsername());
+
+            if (obj.getName() != null) {
+                dbUser.setName(obj.getName());
+            }
+            if (obj.getEmail() != null) {
+                dbUser.setEmail(obj.getEmail());
+            }
+            if (obj.getDateOfBirth() != null) {
+                dbUser.setDateOfBirth(obj.getDateOfBirth());
+            }
+            if (obj.getGender() != null) {
+                dbUser.setGender(obj.getGender());
+            }
+            if (obj.getPassword() != null) {
+                dbUser.setPassword(obj.getPassword());
+            }
+            if (obj.getBio() != null) {
+                dbUser.setBio(obj.getBio());
+            }
+            if (obj.getUsername() != null) {
+                dbUser.setUsername(obj.getUsername());
+            }
+
             return userRepository.save(dbUser);
         } else {
             throw new RuntimeException("User not found");
         }
     }
+
     //add forum to user
     public User addForumToUser(String userId, Forum forum) {
         User user = findById(userId);
