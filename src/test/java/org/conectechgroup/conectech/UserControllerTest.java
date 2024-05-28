@@ -99,6 +99,29 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name").value("User1"));
         verify(userService, times(1)).findById("1");
     }
+    @Test
+    public void testFindByName() throws Exception {
+        User user = new User();
+        user.setId("1");
+        user.setName("User1");
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId("1");
+        userDTO.setName("User1");
+
+        when(userService.findByName("User1")).thenReturn(user);
+        when(userService.convertToDTO(user)).thenReturn(userDTO);
+
+        mockMvc.perform(get("/users/name/User1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("User1"));
+
+        verify(userService, times(1)).findByName("User1");
+        verify(userService, times(1)).convertToDTO(user);
+    }
+
 
     @Test
     public void testInsert() throws Exception {
