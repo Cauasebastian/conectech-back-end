@@ -95,8 +95,13 @@ public class UserController {
      */
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
         public ResponseEntity<Void> delete(@PathVariable String id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+        User user = service.findById(id); // Certifique-se de que findById é chamado
+        if (user != null) {
+            service.delete(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**
