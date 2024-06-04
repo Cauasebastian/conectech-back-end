@@ -6,9 +6,15 @@ import org.conectechgroup.conectech.model.Event;
 import org.conectechgroup.conectech.service.EventService;
 import org.conectechgroup.conectech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -127,6 +133,25 @@ public class EventController {
         Event event = eventService.findByTitle(title);
         EventDTO eventDTO = eventService.convertToDTO(event);
         return ResponseEntity.ok().body(eventDTO);
+    }
+
+    @PostMapping("/{id}/uploadImage")
+    public ResponseEntity<String> uploadImage(@PathVariable String id, @RequestParam("image") MultipartFile imageFile) throws IOException, NoSuchAlgorithmException {
+        System.out.println("Received request to upload image for event: " + id);
+        eventService.saveEventWithImage(id, imageFile);
+        return ResponseEntity.status(HttpStatus.OK).body("Image uploaded successfully");
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getEventImage(@PathVariable String id) {
+        byte[] image = eventService.getEventImage(id);
+        if (image != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(image, headers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
 

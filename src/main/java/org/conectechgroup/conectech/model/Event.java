@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "events")
 public class Event implements java.io.Serializable {
@@ -19,6 +20,9 @@ public class Event implements java.io.Serializable {
     private String description;
     private String location;
     private Date date;
+
+    @DBRef
+    private Image image;
 
     @DBRef(lazy = true)
     @JsonBackReference
@@ -36,7 +40,7 @@ public class Event implements java.io.Serializable {
     public Event() {
     }
 
-    public Event(String id, String title, String description, String location, Date date, User author, List<User> participants, List<Post> posts) {
+    public Event(String id, String title, String description, String location, Date date, User author, List<User> participants, List<Post> posts, Image image) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -45,6 +49,7 @@ public class Event implements java.io.Serializable {
         this.author = author;
         this.participants = participants;
         this.posts = posts;
+        this.image = image;
     }
 
     public String getId() {
@@ -117,5 +122,37 @@ public class Event implements java.io.Serializable {
 
     public void setForum(Forum forum) {
         this.forum = forum;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+        return Objects.equals(getId(), event.getId()) && Objects.equals(getTitle(), event.getTitle()) && Objects.equals(getDescription(), event.getDescription()) && Objects.equals(getLocation(), event.getLocation()) && Objects.equals(getDate(), event.getDate()) && Objects.equals(getImage(), event.getImage()) && Objects.equals(getAuthor(), event.getAuthor()) && Objects.equals(getParticipants(), event.getParticipants()) && Objects.equals(getPosts(), event.getPosts()) && Objects.equals(getForum(), event.getForum());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(getId());
+        result = 31 * result + Objects.hashCode(getTitle());
+        result = 31 * result + Objects.hashCode(getDescription());
+        result = 31 * result + Objects.hashCode(getLocation());
+        result = 31 * result + Objects.hashCode(getDate());
+        result = 31 * result + Objects.hashCode(getImage());
+        result = 31 * result + Objects.hashCode(getAuthor());
+        result = 31 * result + Objects.hashCode(getParticipants());
+        result = 31 * result + Objects.hashCode(getPosts());
+        result = 31 * result + Objects.hashCode(getForum());
+        return result;
     }
 }
