@@ -139,6 +139,16 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO> login(@RequestParam("email") String email, @RequestParam("password") String password) {
+        User user = service.findByEmailAndPassword(email, password);
+        if (user != null) {
+            UserDTO userDTO = service.convertToDTO(user);
+            return ResponseEntity.ok().body(userDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     //#endregion
 
