@@ -228,15 +228,30 @@ public class UserController {
      */
     @DeleteMapping("/{id}/posts/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable String id, @PathVariable String postId) {
+
+        // 1. Fetch User and Post:
         User user = service.findById(id);
-        Post post = user.getPosts().stream().filter(p -> p.getId().equals(postId)).findFirst().orElse(null);
-        if (post == null) {
-            return ResponseEntity.notFound().build();
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // User not found
         }
-        user.getPosts().remove(post);
+
+        Post postToDelete = user.getPosts().stream()
+                .filter(p -> p.getId().equals(postId))
+                .findFirst()
+                .orElse(null);
+
+        if (postToDelete == null) {
+            return ResponseEntity.notFound().build(); // Post not found for this user
+        }
+
+        // 2. Remove the Post Reference:
+        user.getPosts().remove(postToDelete);
+
+        // 3. Update User and Delete Post:
         service.update(user);
         postService.delete(postId);
-        return ResponseEntity.noContent().build();
+
+        return ResponseEntity.noContent().build(); // Success, no content needed
     }
 
     /**

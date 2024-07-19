@@ -87,10 +87,12 @@ public class PostService {
      * @param id the id of the post
      */
     public void delete(String id) {
-        repo.deleteById(id);
-    }
-
-    public void delete(int i) {
+        if (repo.findById (id).isPresent()) {
+            repo.deleteById(id);
+        }
+        else {
+            throw new IllegalArgumentException("Post not found");
+        }
     }
     /**
      * Updates a post.

@@ -210,14 +210,6 @@ public class UserService {
     }
 
     /**
-     * Deletes a post by id.
-     * @param postId The id of the post to be deleted.
-     */
-    public void deletePost(String postId) {
-        postService.delete(Integer.parseInt(postId)); // Parse String to Integer
-    }
-
-    /**
      * Converts a User object to UserDTO.
      * @param user The User object.
      * @return The UserDTO object.
@@ -292,6 +284,16 @@ public class UserService {
     public User findByEmailAndPassword(String email, String password) {
         return repo.findByEmailAndPassword(email, password);}
 
+    /**
+     * salva o usuário com a imagem do perfil e atualiza a imagem do perfil do usuário
+     * alem disso verifica se a imagem antiga é a mesma que a nova e
+     * atualiza a imagem do usuário se a imagem antiga for diferente da nova
+     * @param id
+     * @param imageFile
+     * @return
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
     public User saveUserWithImage(String id, MultipartFile imageFile) throws IOException, NoSuchAlgorithmException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -319,7 +321,11 @@ public class UserService {
                 imageRepository.save(image);
             }
 
-            // Check if the user already has a profile image
+            /* Checa se a imagem antiga é a mesma que a nova e atualiza
+             a imagem do usuário se a imagem antiga for diferente da nova
+             se a imagem antiga não for a mesma que a nova, a imagem antiga é deletada
+             */
+
             Image oldImage = user.getProfileImage();
             if (oldImage != null && !oldImage.equals(image)) {
                 // Update user's profile image
@@ -343,13 +349,22 @@ public class UserService {
             throw new RuntimeException("User not found");
         }
     }
-    //cauculate hash of image and return it in base64 format
+    /**
+     * Calculate the hash of a byte array using the SHA-256 algorithm if available return the hash as a Base64-encoded string.
+     * @param data The byte array.
+     * @return The hash as a Base64-encoded string.
+     * @throws NoSuchAlgorithmException if the SHA-256 algorithm is not available.
+     */
     private String calculateHash(byte[] data) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashBytes = digest.digest(data);
         return Base64.getEncoder().encodeToString(hashBytes);
     }
-    //get user image
+    /**
+     * Get the image of a user.
+     * @param id The id of the user.
+     * @return The image data.
+     */
     public byte[] getUserImage(String id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
